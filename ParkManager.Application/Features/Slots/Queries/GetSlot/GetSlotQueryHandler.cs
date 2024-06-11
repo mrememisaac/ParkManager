@@ -2,7 +2,7 @@
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Domain;
 
-namespace ParkManager.Application.Features.Parks.Queries.GetPark
+namespace ParkManager.Application.Features.Slots.Queries.GetSlot
 {
     public class GetSlotQueryHandler : IRequestHandler<GetSlotQuery, Slot>
     {
