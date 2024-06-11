@@ -4,7 +4,7 @@
     {
         Task<Entity> Add(Entity entity);
         Task<Entity> Update(Entity entity);
-        Task<Entity> Get(int id);
-        Task Delete(int id);
+        Task<Entity> Get(Guid id);
+        Task Delete(Guid id);
     }
 }
