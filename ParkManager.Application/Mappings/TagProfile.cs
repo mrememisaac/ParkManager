@@ -11,6 +11,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddTagCommand, Tag>();
             CreateMap<UpdateTagCommand, Tag>();
+            CreateMap<UpdateTagCommandResponse, Tag>().ReverseMap();
+            CreateMap<AddTagCommandResponse, Tag>().ReverseMap();
         }
     }
 }

@@ -11,6 +11,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddVehicleCommand, Vehicle>();
             CreateMap<UpdateVehicleCommand, Vehicle>();
+            CreateMap<UpdateVehicleCommandResponse, Vehicle>().ReverseMap();
+            CreateMap<AddVehicleCommandResponse, Vehicle>().ReverseMap();
         }
     }
 }

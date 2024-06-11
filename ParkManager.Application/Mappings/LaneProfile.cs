@@ -11,6 +11,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddLaneCommand, Lane>();
             CreateMap<UpdateLaneCommand, Lane>();
+            CreateMap<UpdateLaneCommandResponse, Lane>().ReverseMap();
+            CreateMap<AddLaneCommandResponse, Lane>().ReverseMap();
         }
     }
 }

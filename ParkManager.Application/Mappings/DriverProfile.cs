@@ -11,6 +11,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddDriverCommand, Driver>();
             CreateMap<UpdateDriverCommand, Driver>();
+            CreateMap<UpdateDriverCommandResponse, Driver>().ReverseMap();
+            CreateMap<AddDriverCommandResponse, Driver>().ReverseMap();
         }
     }
 }

@@ -16,6 +16,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddArrivalCommand, Arrival>();
             CreateMap<UpdateArrivalCommand, Arrival>();
+            CreateMap<UpdateArrivalCommandResponse, Arrival>().ReverseMap();
+            CreateMap<AddArrivalCommandResponse, Arrival>().ReverseMap();
         }
     }
 }

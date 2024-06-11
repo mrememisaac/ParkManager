@@ -11,6 +11,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddDepartureCommand, Departure>();
             CreateMap<UpdateDepartureCommand, Departure>();
+            CreateMap<UpdateDepartureCommandResponse, Departure>().ReverseMap();
+            CreateMap<AddDepartureCommandResponse, Departure>().ReverseMap();
         }
     }
 }

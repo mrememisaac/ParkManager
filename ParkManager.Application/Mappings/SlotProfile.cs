@@ -11,6 +11,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddSlotCommand, Slot>();
             CreateMap<UpdateSlotCommand, Slot>();
+            CreateMap<UpdateSlotCommandResponse, Slot>().ReverseMap();
+            CreateMap<AddSlotCommandResponse, Slot>().ReverseMap();
         }
     }
 }

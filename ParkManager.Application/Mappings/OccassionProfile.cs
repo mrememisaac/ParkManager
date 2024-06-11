@@ -11,6 +11,8 @@ namespace ParkManager.Application.Mappings
         {
             CreateMap<AddOccasionCommand, Occasion>();
             CreateMap<UpdateOccasionCommand, Occasion>();
+            CreateMap<UpdateOccasionCommandResponse, Occasion>().ReverseMap();
+            CreateMap<AddOccasionCommandResponse, Occasion>().ReverseMap();
         }
     }
 }
