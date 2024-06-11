@@ -3,20 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkManager.Domain", "ParkManager.Domain\ParkManager.Domain.csproj", "{04445F7A-A70D-4B75-B622-B24DCAE07535}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkManager.Domain", "ParkManager.Domain\ParkManager.Domain.csproj", "{04445F7A-A70D-4B75-B622-B24DCAE07535}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkManager.Application", "ParkManager.Application\ParkManager.Application.csproj", "{E22E9887-B63F-4DAD-AB0F-ADE04791A797}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkManager.Application", "ParkManager.Application\ParkManager.Application.csproj", "{E22E9887-B63F-4DAD-AB0F-ADE04791A797}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D171601-70E6-45BE-A845-9452D07FC735}"
 	ProjectSection(SolutionItems) = preProject
 		readme.md = readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkManager.Persistence", "ParkManager.Persistence\ParkManager.Persistence.csproj", "{1D14C6C3-244C-4A3C-9642-514ACAF95963}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkManager.Persistence", "ParkManager.Persistence\ParkManager.Persistence.csproj", "{1D14C6C3-244C-4A3C-9642-514ACAF95963}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkManager.Api", "ParkManager.Api\ParkManager.Api.csproj", "{C85C02F9-8A53-4122-A7AC-22BE7D573061}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkManager.Api", "ParkManager.Api\ParkManager.Api.csproj", "{C85C02F9-8A53-4122-A7AC-22BE7D573061}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkManager.UnitTests", "ParkManager.UnitTests\ParkManager.UnitTests.csproj", "{10274E94-6C37-4342-938B-9BA0D6C09088}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkManager.UnitTests", "ParkManager.UnitTests\ParkManager.UnitTests.csproj", "{10274E94-6C37-4342-938B-9BA0D6C09088}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FAB43070-6E66-4F00-B427-4024307C97DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{82CD6305-7D7A-47AF-B681-C49BF3A491A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{04445F7A-A70D-4B75-B622-B24DCAE07535} = {FAB43070-6E66-4F00-B427-4024307C97DA}
+		{E22E9887-B63F-4DAD-AB0F-ADE04791A797} = {FAB43070-6E66-4F00-B427-4024307C97DA}
+		{1D14C6C3-244C-4A3C-9642-514ACAF95963} = {FAB43070-6E66-4F00-B427-4024307C97DA}
+		{C85C02F9-8A53-4122-A7AC-22BE7D573061} = {FAB43070-6E66-4F00-B427-4024307C97DA}
+		{10274E94-6C37-4342-938B-9BA0D6C09088} = {82CD6305-7D7A-47AF-B681-C49BF3A491A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {547208E9-ADA9-413D-B5A8-188A7105A32D}
