@@ -6,9 +6,9 @@ namespace ParkManager.Application.Features.Departures.Commands.RemoveDeparture
 {
     public class RemoveDepartureCommand : IRequest
     {
-        public int DepartureId { get; set; }
+        public Guid DepartureId { get; set; }
 
-        public RemoveDepartureCommand(int departureId)
+        public RemoveDepartureCommand(Guid departureId)
         {
             DepartureId = departureId;
         }

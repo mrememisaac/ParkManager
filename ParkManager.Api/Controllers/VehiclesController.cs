@@ -23,7 +23,7 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Models.Vehicle> Get(int id)
+        public async Task<Models.Vehicle> Get(Guid id)
         {
             var query = new GetVehicleQuery(id);
             var commandResponse = await _mediator.Send(query);
@@ -41,7 +41,7 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<Models.Vehicle> Put(int id, [FromBody] Models.Vehicle vehicle)
+        public async Task<Models.Vehicle> Put(Guid id, [FromBody] Models.Vehicle vehicle)
         {
             var command = _mapper.Map<UpdateVehicleCommand>(vehicle);
             var commandResponse = await _mediator.Send(command);
@@ -51,7 +51,7 @@ namespace ParkManager.Api.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             var command = new RemoveVehicleCommand(id);
             await _mediator.Send(command);

@@ -23,7 +23,7 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Models.Arrival> Get(int id)
+        public async Task<Models.Arrival> Get(Guid id)
         {
             var query = new GetArrivalQuery(id);
             var commandResponse = await _mediator.Send(query);
@@ -41,7 +41,7 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<Models.Arrival> Put(int id, [FromBody] Models.Arrival arrival)
+        public async Task<Models.Arrival> Put(Guid id, [FromBody] Models.Arrival arrival)
         {
             var command = _mapper.Map<UpdateArrivalCommand>(arrival);
             var commandResponse = await _mediator.Send(command);
@@ -51,7 +51,7 @@ namespace ParkManager.Api.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             var command = new RemoveArrivalCommand(id);
             await _mediator.Send(command);

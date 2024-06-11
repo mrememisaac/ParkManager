@@ -23,7 +23,7 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Models.Driver> Get(int id)
+        public async Task<Models.Driver> Get(Guid id)
         {
             var query = new GetDriverQuery(id);
             var commandResponse = await _mediator.Send(query);
@@ -41,7 +41,7 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<Models.Driver> Put(int id, [FromBody] Models.Driver driver)
+        public async Task<Models.Driver> Put(Guid id, [FromBody] Models.Driver driver)
         {
             var command = _mapper.Map<UpdateDriverCommand>(driver);
             var commandResponse = await _mediator.Send(command);
@@ -51,7 +51,7 @@ namespace ParkManager.Api.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             var command = new RemoveDriverCommand(id);
             await _mediator.Send(command);

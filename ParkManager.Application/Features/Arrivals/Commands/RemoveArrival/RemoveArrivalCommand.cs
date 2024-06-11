@@ -6,9 +6,9 @@ namespace ParkManager.Application.Features.Arrivals.Commands.RemoveArrival
 {
     public class RemoveArrivalCommand : IRequest
     {
-        public int ArrivalId { get; set; }
+        public Guid ArrivalId { get; set; }
 
-        public RemoveArrivalCommand(int arrivalId)
+        public RemoveArrivalCommand(Guid arrivalId)
         {
             ArrivalId = arrivalId;
         }

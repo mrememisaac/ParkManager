@@ -6,11 +6,11 @@ namespace ParkManager.Application.Features.Drivers.Commands.RemoveDriver
 {
     public class RemoveDriverCommand : IRequest
     {
-        public RemoveDriverCommand(int id)
+        public RemoveDriverCommand(Guid id)
         {
             Id = id;
         }
 
-        public int Id { get; }
+        public Guid Id { get; }
     }
 }

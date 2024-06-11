@@ -6,11 +6,11 @@ namespace ParkManager.Application.Features.Vehicles.Commands.RemoveVehicle
 {
     public class RemoveVehicleCommand : IRequest
     {
-        public RemoveVehicleCommand(int vehicleId)
+        public RemoveVehicleCommand(Guid vehicleId)
         {
             VehicleId = vehicleId;
         }
 
-        public int VehicleId { get; set; }
+        public Guid VehicleId { get; set; }
     }
 }

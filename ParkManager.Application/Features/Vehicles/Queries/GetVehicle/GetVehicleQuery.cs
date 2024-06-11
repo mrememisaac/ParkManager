@@ -5,9 +5,9 @@ namespace ParkManager.Application.Features.Vehicles.Queries.GetVehicle
 {
     public class GetVehicleQuery : IRequest<GetVehicleQueryResponse>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public GetVehicleQuery(int id)
+        public GetVehicleQuery(Guid id)
         {
             Id = id;
         }

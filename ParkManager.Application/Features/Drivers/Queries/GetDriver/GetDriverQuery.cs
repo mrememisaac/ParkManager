@@ -12,9 +12,9 @@ namespace ParkManager.Application.Features.Drivers.Queries.GetDriver
 {
     public class GetDriverQuery : IRequest<GetDriverQueryResponse>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public GetDriverQuery(int id)
+        public GetDriverQuery(Guid id)
         {
             Id = id;
         }

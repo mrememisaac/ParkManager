@@ -5,9 +5,9 @@ namespace ParkManager.Application.Features.Arrivals.Queries.GetArrival
 {
     public class GetArrivalQuery : IRequest<Arrival>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public GetArrivalQuery(int id)
+        public GetArrivalQuery(Guid id)
         {
             Id = id;
         }

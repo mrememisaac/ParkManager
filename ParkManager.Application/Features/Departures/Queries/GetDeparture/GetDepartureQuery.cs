@@ -5,9 +5,9 @@ namespace ParkManager.Application.Features.Departures.Queries.GetDeparture
 {
     public class GetDepartureQuery : IRequest<Departure>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public GetDepartureQuery(int id)
+        public GetDepartureQuery(Guid id)
         {
             Id = id;
         }

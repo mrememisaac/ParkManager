@@ -5,9 +5,9 @@ namespace ParkManager.Application.Features.Parks.Queries.GetPark
 {
     public class GetParkQuery : IRequest<Park>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public GetParkQuery(int id)
+        public GetParkQuery(Guid id)
         {
             Id = id;
         }
