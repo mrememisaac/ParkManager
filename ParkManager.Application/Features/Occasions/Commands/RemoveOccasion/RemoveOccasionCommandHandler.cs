@@ -8,17 +8,17 @@ namespace ParkManager.Application.Features.Occasions.Commands.RemoveOccasion
     {
 
         private readonly IMapper _mapper;
-        private readonly IOccasionsRepository _OccasionRepository;
+        private readonly IOccasionsRepository _occasionRepository;
 
-        public RemoveOccasionCommandHandler(IOccasionsRepository OccasionRepository, IMapper mapper)
+        public RemoveOccasionCommandHandler(IOccasionsRepository occasionRepository, IMapper mapper)
         {
-            _OccasionRepository = OccasionRepository;
+            _occasionRepository = occasionRepository;
             _mapper = mapper;
         }
 
         public async Task Handle(RemoveOccasionCommand request, CancellationToken cancellationToken)
         {
-            await _OccasionRepository.Delete(request.Id);
+            await _occasionRepository.Delete(request.Id);
         }
     }
 }

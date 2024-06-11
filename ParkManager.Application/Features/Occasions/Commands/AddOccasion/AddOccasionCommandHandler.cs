@@ -8,13 +8,13 @@ namespace ParkManager.Application.Features.Occasions.Commands.AddOccasion
 {
     public class AddOccasionCommandHandler : IRequestHandler<AddOccasionCommand, AddOccasionCommandResponse>
     {
-        private readonly IOccasionsRepository _OccasionRepository;
+        private readonly IOccasionsRepository _occasionRepository;
         private readonly AddOccasionCommandValidator _validator;
         private readonly IMapper _mapper;
 
-        public AddOccasionCommandHandler(IOccasionsRepository OccasionRepository, AddOccasionCommandValidator validator, IMapper mapper)
+        public AddOccasionCommandHandler(IOccasionsRepository occasionRepository, AddOccasionCommandValidator validator, IMapper mapper)
         {
-            _OccasionRepository = OccasionRepository;
+            _occasionRepository = occasionRepository;
             _validator = validator;
             _mapper = mapper;
         }
@@ -22,8 +22,8 @@ namespace ParkManager.Application.Features.Occasions.Commands.AddOccasion
         public async Task<AddOccasionCommandResponse> Handle(AddOccasionCommand request, CancellationToken cancellationToken)
         {
             await _validator.ValidateAndThrowAsync(request, cancellationToken);
-            var Occasion = _mapper.Map<Occasion>(request);
-            var response = await _OccasionRepository.Add(Occasion);
+            var occasion = _mapper.Map<Occasion>(request);
+            var response = await _occasionRepository.Add(occasion);
             return _mapper.Map<AddOccasionCommandResponse>(response);
         }
     }

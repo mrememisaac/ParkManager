@@ -6,16 +6,16 @@ namespace ParkManager.Application.Features.Occasions.Queries.GetOccasion
 {
     public class GetOccasionQueryHandler : IRequestHandler<GetOccasionQuery, Occasion>
     {
-        private readonly IOccasionsRepository _OccasionsRepository;
+        private readonly IOccasionsRepository _occasionsRepository;
         
-        public GetOccasionQueryHandler(IOccasionsRepository OccasionRepository)
+        public GetOccasionQueryHandler(IOccasionsRepository occasionRepository)
         {
-            _OccasionsRepository = OccasionRepository;
+            _occasionsRepository = occasionRepository;
         }
 
         public async Task<Occasion> Handle(GetOccasionQuery request, CancellationToken cancellationToken)
         {
-            return await _OccasionsRepository.Get(request.Id);
+            return await _occasionsRepository.Get(request.Id);
         }
     }
 }
