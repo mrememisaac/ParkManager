@@ -12,7 +12,7 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var arrival = new Arrival(DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
-            var image = new ArrivalImage();
+            var image = new ArrivalImage(Guid.NewGuid(), "abc.jpg");
 
             // Act
             arrival.AddImage(image);
@@ -26,7 +26,7 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var arrival = new Arrival(DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
-            var image = new ArrivalImage();
+            var image = new ArrivalImage(Guid.NewGuid(), "abc.jpg");
             arrival.AddImage(image);
 
             // Act

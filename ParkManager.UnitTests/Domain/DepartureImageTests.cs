@@ -5,43 +5,43 @@ using System;
 
 namespace ParkManager.UnitTests
 {
-    public class ArrivalImageTests
+    public class DepartureImageTests
     {
         [Fact]
         public void Constructor_ShouldInitializeProperties()
         {
             // Arrange
-            var arrivalId = Guid.NewGuid();
+            var departureId = Guid.NewGuid();
             var path = "test/path";
 
             // Act
-            var arrivalImage = new ArrivalImage(arrivalId, path);
+            var departureImage = new DepartureImage(departureId, path);
 
             // Assert
-            Assert.Equal(arrivalId, arrivalImage.ArrivalId);
-            Assert.Equal(path, arrivalImage.Path);
+            Assert.Equal(departureId, departureImage.DepartureId);
+            Assert.Equal(path, departureImage.Path);
         }
 
         [Fact]
-        public void Constructor_ShouldThrowException_WhenArrivalIdIsEmpty()
+        public void Constructor_ShouldThrowException_WhenDepartureIdIsEmpty()
         {
             // Arrange
-            var arrivalId = Guid.Empty;
+            var departureId = Guid.Empty;
             var path = "test/path";
 
             // Act & Assert
-            Assert.Throws<EmptyGuidException>(() => new ArrivalImage(arrivalId, path));
+            Assert.Throws<EmptyGuidException>(() => new DepartureImage(departureId, path));
         }
 
         [Fact]
         public void Constructor_ShouldThrowException_WhenPathIsNull()
         {
             // Arrange
-            var arrivalId = Guid.NewGuid();
+            var departureId = Guid.NewGuid();
             string path = null;
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new ArrivalImage(arrivalId, path));
+            Assert.Throws<ArgumentException>(() => new DepartureImage(departureId, path));
         }
     }
 }
