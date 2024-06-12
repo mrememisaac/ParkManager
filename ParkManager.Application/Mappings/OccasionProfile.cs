@@ -5,9 +5,9 @@ using ParkManager.Domain;
 
 namespace ParkManager.Application.Mappings
 {
-    public class OccassionProfile : Profile
+    public class OccasionProfile : Profile
     {
-        public OccassionProfile()
+        public OccasionProfile()
         {
             CreateMap<AddOccasionCommand, Occasion>();
             CreateMap<UpdateOccasionCommand, Occasion>();
