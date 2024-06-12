@@ -1,4 +1,4 @@
 ﻿namespace ParkManager.Api.Models
 {
-    public class Departure { }
+    public record Departure(DateTime Timestamp, Guid ParkId, Guid VehicleId, Guid DriverId, Guid TagId) { }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ParkManager.Api.Models
 {
-    public class Slot
+    public record Slot(Guid LaneId, string Name)
     {
     }
 }

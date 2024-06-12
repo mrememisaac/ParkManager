@@ -1,4 +1,4 @@
 ﻿namespace ParkManager.Api.Models
 {
-    public class Driver { }
+    public record Driver(string Name, string PhoneNumber) { }
 }

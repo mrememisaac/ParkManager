@@ -1,4 +1,4 @@
 ﻿namespace ParkManager.Api.Models
 {
-    public class Lane { }
+    public record Lane(Guid ParkId, string Name) { }
 }
