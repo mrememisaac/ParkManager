@@ -26,7 +26,7 @@ namespace ParkManager.Domain
         /// <param name="vehicleId">The ID of the vehicle.</param>
         /// <param name="driverId">The ID of the driver.</param>
         /// <param name="tagId">The ID of the tag.</param>
-        public Departure(DateTime timestamp, int parkId, int vehicleId, int driverId, int tagId) : base(timestamp, parkId, vehicleId, driverId, tagId)
+        public Departure(DateTime timestamp, Guid parkId, Guid vehicleId, Guid driverId, Guid tagId) : base(timestamp, parkId, vehicleId, driverId, tagId)
         {
 
         }
