@@ -1,7 +1,7 @@
 ﻿namespace ParkManager.Domain.Exceptions
 {
     [Serializable]
-    internal class EmptyGuidException : ArgumentException
+    public class EmptyGuidException : ArgumentException
     {
         public EmptyGuidException()
         {
