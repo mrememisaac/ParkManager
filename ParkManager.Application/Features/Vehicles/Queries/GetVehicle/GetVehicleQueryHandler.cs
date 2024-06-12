@@ -1,21 +1,25 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Features.Vehicles.Queries.GetVehicle
 {
-    public class GetVehicleQueryHandler : IRequestHandler<GetVehicleQuery, Vehicle>
+    public class GetVehicleQueryHandler : IRequestHandler<GetVehicleQuery, GetVehicleQueryResponse>
     {
         private readonly IVehiclesRepository _vehiclesRepository;
-        
-        public GetVehicleQueryHandler(IVehiclesRepository vehicleRepository)
+        private readonly IMapper _mapper;
+
+        public GetVehicleQueryHandler(IVehiclesRepository vehicleRepository, IMapper mapper)
         {
             _vehiclesRepository = vehicleRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Vehicle> Handle(GetVehicleQuery request, CancellationToken cancellationToken)
+        public async Task<GetVehicleQueryResponse> Handle(GetVehicleQuery request, CancellationToken cancellationToken)
         {
-            return await _vehiclesRepository.Get(request.Id);
+            var vehicle = await _vehiclesRepository.Get(request.Id);
+            return _mapper.Map<GetVehicleQueryResponse>(vehicle);
         }
     }
 }
