@@ -73,5 +73,78 @@ namespace ParkManager.Domain
         /// This field is used internally to manage the collection of images.
         /// </summary>
         public List<ParkImage> _images = new List<ParkImage>();
+
+        /// <summary>
+        /// Adds an image to the park.
+        /// </summary>
+        /// <param name="image">The image to add.</param>
+        public void AddImage(ParkImage image)
+        {
+            if (image == null)
+            {
+                throw new ArgumentNullException(nameof(image));
+            }
+
+            _images.Add(image);
+        }
+
+        /// <summary>
+        /// Removes an image from the park.
+        /// </summary>
+        /// <param name="image">The image to remove.</param>
+        public void RemoveImage(ParkImage image)
+        {
+            if (image == null)
+            {
+                throw new ArgumentNullException(nameof(image));
+            }
+
+            _images.Remove(image);
+        }
+
+        /// <summary>
+        /// Gets a read-only collection of park lanes.
+        /// </summary>
+        public ReadOnlyCollection<Lane> Lanes => _lanes.AsReadOnly();
+
+        /// <summary>
+        /// A list of park lanes.
+        /// This field is used internally to manage the collection of lanes.
+        /// </summary>
+        public List<Lane> _lanes = new List<Lane>();
+
+        /// <summary>
+        /// Adds a lane to the park.
+        /// </summary>
+        /// <param name="lane">The lane to add.</param>
+        public void AddLane(Lane lane)
+        {
+            if (lane == null)
+            {
+                throw new ArgumentNullException(nameof(lane));
+            }
+
+            if (_lanes.Contains(lane))
+            {
+                throw new ArgumentException("The lane has already been added.", nameof(lane));
+            }
+
+            _lanes.Add(lane);
+        }
+
+        /// <summary>
+        /// Removes a lane from the park.
+        /// </summary>
+        /// <param name="lane">The lane to remove.</param>
+        public void RemoveLane(Lane lane)
+        {
+            if (lane == null)
+            {
+                throw new ArgumentNullException(nameof(lane));
+            }
+
+            _lanes.Remove(lane);
+        }
+
     }
 }

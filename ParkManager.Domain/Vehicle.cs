@@ -41,5 +41,34 @@ namespace ParkManager.Domain
             Model = model ?? throw new ArgumentNullException(nameof(model));
             Registration = registration ?? throw new ArgumentNullException(nameof(registration));
         }
+
+        /// <summary>
+        /// Adds a vehicle image to the collection.
+        /// </summary>
+        /// <param name="image">The vehicle image to add.</param>
+        public void AddImage(VehicleImage image)
+        {
+            if (image == null)
+            {
+                throw new ArgumentNullException(nameof(image));
+            }
+
+            if (_images.Contains(image))
+            {
+                throw new ArgumentException("Image already exists in the collection.", nameof(image));
+            }
+
+            _images.Add(image);
+        }
+
+        /// <summary>
+        /// Removes a vehicle image from the collection.
+        /// </summary>
+        /// <param name="image">The vehicle image to remove.</param>
+        /// <returns>True if the image was successfully removed; otherwise, false.</returns>
+        public bool RemoveImage(VehicleImage image)
+        {
+            return _images.Remove(image);
+        }
     }
 }

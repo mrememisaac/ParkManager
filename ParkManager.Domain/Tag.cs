@@ -16,6 +16,8 @@
         /// <param name="number">The tag number.</param>
         public Tag(int number)
         {
+            if (number < 0)
+                throw new ArgumentException("Tag number cannot be negative.", nameof(number));
             Number = number;
         }
     }
