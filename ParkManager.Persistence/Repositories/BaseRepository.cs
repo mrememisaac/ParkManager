@@ -20,14 +20,14 @@ namespace ParkManager.Persistence.Repositories
             return entity;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             var entity = await Get(id);
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<T> Get(int id)
+        public async Task<T> Get(Guid id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
