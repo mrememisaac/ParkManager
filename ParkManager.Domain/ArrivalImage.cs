@@ -22,11 +22,11 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets or sets the ID of the arrival associated with the image.
         /// </summary>
-        public Guid ArrivalId { get; set; }
+        public Guid ArrivalId { get; private set; }
 
         /// <summary>
         /// Gets or sets the path of the image.
         /// </summary>
-        public required string Path { get; set; }
+        public string Path { get; private set; }
     }
 }
