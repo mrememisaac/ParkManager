@@ -6,9 +6,9 @@ namespace ParkManager.Application.Features.Tags.Commands.RemoveTag
 {
     public class RemoveTagCommand : IRequest
     {
-        public int TagId { get; set; }
+        public Guid TagId { get; set; }
 
-        public RemoveTagCommand(int tagId)
+        public RemoveTagCommand(Guid tagId)
         {
             TagId = tagId;
         }
