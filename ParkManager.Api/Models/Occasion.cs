@@ -1,6 +1,6 @@
 ﻿namespace ParkManager.Api.Models
 {
-    public record Occasion(string Name, DateTime StartDate, DateTime EndDate)
+    public record Occasion(Guid Id, string Name, DateTime StartDate, DateTime EndDate)
     {
     }
 }
