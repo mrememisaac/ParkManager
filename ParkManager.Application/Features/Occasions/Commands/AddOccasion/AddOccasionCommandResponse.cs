@@ -2,7 +2,7 @@
 {
     public class AddOccasionCommandResponse
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Gets or sets the name of the occasion.
         /// </summary>
