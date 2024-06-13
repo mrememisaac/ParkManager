@@ -22,8 +22,9 @@ namespace ParkManager.Domain
         /// </summary>
         /// <param name="name">The name of the driver.</param>
         /// <param name="phoneNumber">The phone number of the driver.</param>
-        public Driver(string name, string phoneNumber)
+        public Driver(Guid id, string name, string phoneNumber)
         {
+            Id = id == Guid.Empty ? throw new ArgumentNullException(nameof(id)) : id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
         }

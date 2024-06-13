@@ -21,14 +21,15 @@ namespace ParkManager.Domain
         /// <summary>
         /// Initializes a new instance of the Departure class.
         /// </summary>
+        /// <param name="departureId">The ID of the departure.</param>
         /// <param name="timestamp">The timestamp of the departure.</param>
         /// <param name="parkId">The ID of the park.</param>
         /// <param name="vehicleId">The ID of the vehicle.</param>
         /// <param name="driverId">The ID of the driver.</param>
         /// <param name="tagId">The ID of the tag.</param>
-        public Departure(DateTime timestamp, Guid parkId, Guid vehicleId, Guid driverId, Guid tagId) : base(timestamp, parkId, vehicleId, driverId, tagId)
+        public Departure(Guid departureId, DateTime timestamp, Guid parkId, Guid vehicleId, Guid driverId, Guid tagId) : base(timestamp, parkId, vehicleId, driverId, tagId)
         {
-
+            Id = departureId;
         }
 
 

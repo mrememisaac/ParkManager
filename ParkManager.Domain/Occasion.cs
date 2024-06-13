@@ -26,13 +26,14 @@
         /// <param name="name">The name of the occasion.</param>
         /// <param name="startDate">The start date of the occasion.</param>
         /// <param name="endDate">The end date of the occasion.</param>
-        public Occasion(string name, DateTime startDate, DateTime endDate)
+        public Occasion(Guid id, string name, DateTime startDate, DateTime endDate)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             if(startDate > endDate)
                 throw new ArgumentException("Start date must be before end date.");
-            if(startDate < DateTime.Now)
-                throw new ArgumentException("Start date must be in the future.");
+            if(startDate.DayOfYear < DateTime.Now.DayOfYear)
+                throw new ArgumentException("Start cannot be in the past.");
+            Id = id == Guid.Empty ? throw new ArgumentException("Id cannot be empty") : id;
             StartDate = startDate;
             EndDate = endDate;
         }

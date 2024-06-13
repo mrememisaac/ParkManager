@@ -52,8 +52,9 @@ namespace ParkManager.Domain
         /// <param name="country">The country of the park.</param>
         /// <param name="latitude">The latitude of the park.</param>
         /// <param name="longitude">The longitude of the park.</param>
-        public Park(string name, string street, string city, string state, string country, long latitude, long longitude)
+        public Park(Guid id, string name, string street, string city, string state, string country, long latitude, long longitude)
         {
+            Id = id == Guid.Empty ? throw new ArgumentException("Id cannot be empty") : id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Street = street ?? throw new ArgumentNullException(nameof(street));
             City = city ?? throw new ArgumentNullException(nameof(city));

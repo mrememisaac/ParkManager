@@ -36,13 +36,17 @@ namespace ParkManager.Domain
         /// <param name="parkId">The ID of the park associated with the lane.</param>
         /// <param name="name">The name of the lane.</param>
         /// <exception cref="EmptyGuidException">Thrown when the park ID is empty.</exception>
-        public Lane(Guid parkId, string name)
+        public Lane(Guid laneId, Guid parkId, string name)
         {
             if (parkId == Guid.Empty)
             {
                 throw new EmptyGuidException("Park ID cannot be empty.", nameof(parkId));
             }
-
+            if (laneId == Guid.Empty)
+            {
+                throw new EmptyGuidException("Lane ID cannot be empty.", nameof(laneId));
+            }
+            Id = laneId;
             ParkId = parkId;
             Name = name;
         }

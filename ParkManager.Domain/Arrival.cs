@@ -22,13 +22,15 @@ namespace ParkManager.Domain
         /// <summary>
         /// Initializes a new instance of the Arrival class with the specified parameters.
         /// </summary>
+        /// <param name="arrivalId">The ID of the arrival event.</param>
         /// <param name="timestamp">The timestamp of the arrival event.</param>
         /// <param name="parkId">The ID of the park associated with the arrival event.</param>
         /// <param name="vehicleId">The ID of the vehicle associated with the arrival event.</param>
         /// <param name="driverId">The ID of the driver associated with the arrival event.</param>
         /// <param name="tagId">The ID of the tag associated with the arrival event.</param>
-        public Arrival(DateTime timestamp, Guid parkId, Guid vehicleId, Guid driverId, Guid tagId) : base(timestamp, parkId, vehicleId, driverId, tagId)
+        public Arrival(Guid arrivalId, DateTime timestamp, Guid parkId, Guid vehicleId, Guid driverId, Guid tagId) : base(timestamp, parkId, vehicleId, driverId, tagId)
         {
+            Id = arrivalId;
         }
 
         /// <summary>
