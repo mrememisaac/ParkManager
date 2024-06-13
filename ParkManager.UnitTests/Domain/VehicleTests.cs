@@ -10,12 +10,13 @@ namespace ParkManager.UnitTests
         public void Constructor_ShouldInitializeProperties()
         {
             // Arrange
+            var id = Guid.NewGuid();
             var make = "Test Make";
             var model = "Test Model";
             var registration = "Test Registration";
 
             // Act
-            var vehicle = new Vehicle(make, model, registration);
+            var vehicle = new Vehicle(id,make, model, registration);
 
             // Assert
             Assert.Equal(make, vehicle.Make);
@@ -27,7 +28,8 @@ namespace ParkManager.UnitTests
         public void AddImage_ShouldAddImageToImagesCollection()
         {
             // Arrange
-            var vehicle = new Vehicle("Test Make", "Test Model", "Test Registration");
+            var id = Guid.NewGuid();
+            var vehicle = new Vehicle(id, "Test Make", "Test Model", "Test Registration");
             var image = new VehicleImage(Guid.NewGuid(), "test/path");
 
             // Act
@@ -41,7 +43,8 @@ namespace ParkManager.UnitTests
         public void RemoveImage_ShouldRemoveImageFromImagesCollection()
         {
             // Arrange
-            var vehicle = new Vehicle("Test Make", "Test Model", "Test Registration");
+            var id = Guid.NewGuid();
+            var vehicle = new Vehicle(id, "Test Make", "Test Model", "Test Registration");
             var image = new VehicleImage(Guid.NewGuid(), "test/path");
             vehicle.AddImage(image);
 
