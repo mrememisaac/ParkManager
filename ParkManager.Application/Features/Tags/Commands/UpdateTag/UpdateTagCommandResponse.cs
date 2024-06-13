@@ -2,7 +2,7 @@
 {
     public class UpdateTagCommandResponse
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int Number { get; set; }
     }
 }
