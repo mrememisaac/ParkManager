@@ -14,8 +14,9 @@
         /// Initializes a new instance of the <see cref="Tag"/> class.
         /// </summary>
         /// <param name="number">The tag number.</param>
-        public Tag(int number)
+        public Tag(Guid id, int number)
         {
+            Id = id != Guid.Empty ? id : throw new ArgumentException("Id cannot be empty");
             if (number < 0)
                 throw new ArgumentException("Tag number cannot be negative.", nameof(number));
             Number = number;

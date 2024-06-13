@@ -35,8 +35,9 @@ namespace ParkManager.Domain
         /// <param name="make">The make of the vehicle.</param>
         /// <param name="model">The model of the vehicle.</param>
         /// <param name="registration">The registration number of the vehicle.</param>
-        public Vehicle(string make, string model, string registration)
+        public Vehicle(Guid id, string make, string model, string registration)
         {
+            Id = id == Guid.Empty ? throw new ArgumentException("Id cannot be empty.", nameof(id)) : id;
             Make = make ?? throw new ArgumentNullException(nameof(make));
             Model = model ?? throw new ArgumentNullException(nameof(model));
             Registration = registration ?? throw new ArgumentNullException(nameof(registration));

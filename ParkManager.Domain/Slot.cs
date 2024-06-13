@@ -23,13 +23,18 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Slot"/> class.
         /// </summary>
-        public Slot(Guid laneId, string name)
+        public Slot(Guid id, Guid laneId, string name)
         {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentException("Id cannot be empty.", nameof(laneId));
+            }
+            
             if (laneId == Guid.Empty)
             {
                 throw new ArgumentException("Lane ID cannot be empty.", nameof(laneId));
             }
-
+            Id = id;
             LaneId = laneId;
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }

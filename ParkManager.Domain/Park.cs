@@ -35,12 +35,12 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets or sets the latitude of the park.
         /// </summary>
-        public long Latitude { get; private set; }
+        public double Latitude { get; private set; }
 
         /// <summary>
         /// Gets or sets the longitude of the park.
         /// </summary>
-        public long Longitude { get; private set; }
+        public double Longitude { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Park"/> class.
@@ -52,7 +52,7 @@ namespace ParkManager.Domain
         /// <param name="country">The country of the park.</param>
         /// <param name="latitude">The latitude of the park.</param>
         /// <param name="longitude">The longitude of the park.</param>
-        public Park(Guid id, string name, string street, string city, string state, string country, long latitude, long longitude)
+        public Park(Guid id, string name, string street, string city, string state, string country, double latitude, double longitude)
         {
             Id = id == Guid.Empty ? throw new ArgumentException("Id cannot be empty") : id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
