@@ -8,7 +8,7 @@ namespace ParkManager.Application.Features.Slots.Commands.AddSlot
         {
             RuleFor(p => p.Id).NotEmpty();
             RuleFor(p => p.Name).NotEmpty();
-            RuleFor(p => p.SlotId).NotEmpty();
+            RuleFor(p => p.LaneId).NotEmpty();
         }
     }
 }
