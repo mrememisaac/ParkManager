@@ -11,6 +11,7 @@ namespace ParkManager.UnitTests
         public void Constructor_ShouldInitializeProperties()
         {
             // Arrange
+            var id = Guid.NewGuid();
             var name = "Park 1";
             var street = "Street 1";
             var city = "City 1";
@@ -20,7 +21,7 @@ namespace ParkManager.UnitTests
             long longitude = 987654321;
 
             // Act
-            var park = new Park(name, street, city, state, country, latitude, longitude);
+            var park = new Park(id, name, street, city, state, country, latitude, longitude);
 
             // Assert
             Assert.Equal(name, park.Name);
@@ -36,6 +37,7 @@ namespace ParkManager.UnitTests
         public void Constructor_ShouldThrowException_WhenNameIsNull()
         {
             // Arrange
+            var id = Guid.NewGuid();
             string name = null;
             var street = "Street 1";
             var city = "City 1";
@@ -45,13 +47,14 @@ namespace ParkManager.UnitTests
             long longitude = 987654321;
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new Park(name, street, city, state, country, latitude, longitude));
+            Assert.Throws<ArgumentNullException>(() => new Park(id, name, street, city, state, country, latitude, longitude));
         }
 
         [Fact]
         public void Constructor_ShouldThrowException_WhenStreetIsNull()
         {
             // Arrange
+            var id = Guid.NewGuid(); 
             var name = "Park 1";
             string street = null;
             var city = "City 1";
@@ -61,7 +64,7 @@ namespace ParkManager.UnitTests
             long longitude = 987654321;
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new Park(name, street, city, state, country, latitude, longitude));
+            Assert.Throws<ArgumentNullException>(() => new Park(id, name, street, city, state, country, latitude, longitude));
         }
 
         // Add similar tests for City, State, and Country
@@ -70,6 +73,7 @@ namespace ParkManager.UnitTests
         public void Images_ShouldReturnReadOnlyCollection()
         {
             // Arrange
+            var id = Guid.NewGuid(); 
             var name = "Park 1";
             var street = "Street 1";
             var city = "City 1";
@@ -77,7 +81,7 @@ namespace ParkManager.UnitTests
             var country = "Country 1";
             long latitude = 123456789;
             long longitude = 987654321;
-            var park = new Park(name, street, city, state, country, latitude, longitude);
+            var park = new Park(id, name, street, city, state, country, latitude, longitude);
 
             // Act
             var images = park.Images;
@@ -90,8 +94,8 @@ namespace ParkManager.UnitTests
         public void AddLane_ShouldAddLaneToLanesCollection()
         {
             // Arrange
-            var park = new Park("Park 1", "Street 1", "City 1", "State 1", "Country 1", 123456789, 987654321);
-            var lane = new Lane(Guid.NewGuid(), "Lane 1");
+            var park = new Park(Guid.NewGuid(), "Park 1", "Street 1", "City 1", "State 1", "Country 1", 123456789, 987654321);
+            var lane = new Lane(Guid.NewGuid(), Guid.NewGuid(), "Lane 1");
 
             // Act
             park.AddLane(lane);
@@ -104,8 +108,8 @@ namespace ParkManager.UnitTests
         public void RemoveLane_ShouldRemoveLaneFromLanesCollection()
         {
             // Arrange
-            var park = new Park("Park 1", "Street 1", "City 1", "State 1", "Country 1", 123456789, 987654321);
-            var lane = new Lane(Guid.NewGuid(), "Lane 1");
+            var park = new Park(Guid.NewGuid(), "Park 1", "Street 1", "City 1", "State 1", "Country 1", 123456789, 987654321);
+            var lane = new Lane(Guid.NewGuid(), Guid.NewGuid(), "Lane 1");
             park.AddLane(lane);
 
             // Act
@@ -119,7 +123,7 @@ namespace ParkManager.UnitTests
         public void AddImage_ShouldAddImageToImagesCollection()
         {
             // Arrange
-            var park = new Park("Test Park", "Test Street", "Test City", "Test State", "Test Country", 0, 0);
+            var park = new Park(Guid.NewGuid(), "Test Park", "Test Street", "Test City", "Test State", "Test Country", 0, 0);
             var image = new ParkImage(Guid.NewGuid(), "Test Image");
 
             // Act
@@ -133,7 +137,7 @@ namespace ParkManager.UnitTests
         public void RemoveImage_ShouldRemoveImageFromImagesCollection()
         {
             // Arrange
-            var park = new Park("Test Park", "Test Street", "Test City", "Test State", "Test Country", 0, 0);
+            var park = new Park(Guid.NewGuid(), "Test Park", "Test Street", "Test City", "Test State", "Test Country", 0, 0);
             var image = new ParkImage(Guid.NewGuid(), "Test Image");
             park.AddImage(image);
 

@@ -11,7 +11,7 @@ namespace ParkManager.UnitTests
         public void AddImage_ShouldAddImageToImagesCollection()
         {
             // Arrange
-            var arrival = new Arrival(DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+            var arrival = new Arrival(Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
             var image = new ArrivalImage(Guid.NewGuid(), "abc.jpg");
 
             // Act
@@ -25,7 +25,7 @@ namespace ParkManager.UnitTests
         public void RemoveImage_ShouldRemoveImageFromImagesCollection()
         {
             // Arrange
-            var arrival = new Arrival(DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+            var arrival = new Arrival(Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
             var image = new ArrivalImage(Guid.NewGuid(), "abc.jpg");
             arrival.AddImage(image);
 
@@ -40,7 +40,7 @@ namespace ParkManager.UnitTests
         public void Constructor_ShouldInitializeImagesCollection()
         {
             // Arrange
-            var arrival = new Arrival(DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+            var arrival = new Arrival(Guid.NewGuid(), DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
             // Assert
             Assert.NotNull(arrival.Images);

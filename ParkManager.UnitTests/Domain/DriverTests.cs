@@ -14,7 +14,7 @@ namespace ParkManager.UnitTests
             var phoneNumber = "1234567890";
 
             // Act
-            var driver = new Driver(name, phoneNumber);
+            var driver = new Driver(Guid.NewGuid(), name, phoneNumber);
 
             // Assert
             Assert.Equal(name, driver.Name);
@@ -29,7 +29,7 @@ namespace ParkManager.UnitTests
             var phoneNumber = "1234567890";
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new Driver(name, phoneNumber));
+            Assert.Throws<ArgumentNullException>(() => new Driver(Guid.NewGuid(), name, phoneNumber));
         }
 
         [Fact]
@@ -40,14 +40,14 @@ namespace ParkManager.UnitTests
             string phoneNumber = null;
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new Driver(name, phoneNumber));
+            Assert.Throws<ArgumentNullException>(() => new Driver(Guid.NewGuid(), name, phoneNumber));
         }
 
         [Fact]
         public void AddDriverMetadata_ShouldAddMetadataToDriverDetails()
         {
             // Arrange
-            var driver = new Driver("Test Driver", "1234567890");
+            var driver = new Driver(Guid.NewGuid(), "Test Driver", "1234567890");
             var metadata = new DriverMetadata(Guid.NewGuid(), "Key", "Value");
 
             // Act
@@ -61,7 +61,7 @@ namespace ParkManager.UnitTests
         public void RemoveDriverMetadata_ShouldRemoveMetadataFromDriverDetails()
         {
             // Arrange
-            var driver = new Driver("Test Driver", "1234567890");
+            var driver = new Driver(Guid.NewGuid(), "Test Driver", "1234567890");
             var metadata = new DriverMetadata(Guid.NewGuid(), "Key", "Value");
             driver.AddDriverMetadata(metadata);
 
