@@ -1,0 +1,13 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "ParkManagerDb": "Server=(localdb)\\mssqllocaldb;Database=ParkManagerDb;Trusted_Connection=True;",
+    "ParkManagerDbSqllite": "DataSource=:memory:"
+  },
+  "AllowedHosts": "*"
+}
