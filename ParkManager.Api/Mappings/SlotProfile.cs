@@ -2,6 +2,7 @@
 using ParkManager.Api.Models;
 using ParkManager.Application.Features.Slots.Commands.AddSlot;
 using ParkManager.Application.Features.Slots.Commands.UpdateSlot;
+using ParkManager.Application.Features.Slots.Queries.GetSlot;
 
 namespace ParkManager.Api.Mappings
 {
@@ -13,6 +14,7 @@ namespace ParkManager.Api.Mappings
             CreateMap<UpdateSlotCommand, Slot>();
             CreateMap<UpdateSlotCommandResponse, Slot>().ReverseMap();
             CreateMap<AddSlotCommandResponse, Slot>().ReverseMap();
+            CreateMap<Slot, GetSlotQueryResponse>();
         }
     }
 }
