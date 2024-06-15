@@ -1,4 +1,5 @@
-﻿using ParkManager.Application.Contracts.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Domain;
 using ParkManager.Persistence.DataContexts;
 
@@ -6,9 +7,9 @@ namespace ParkManager.Persistence.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : Entity
     {
-        private readonly ParkMangerDbContext _dbContext;
+        private readonly ParkManagerDbContext _dbContext;
 
-        public BaseRepository(ParkMangerDbContext dbContext)
+        public BaseRepository(ParkManagerDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -37,6 +38,11 @@ namespace ParkManager.Persistence.Repositories
             _dbContext.Set<T>().Update(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
+        }
+
+        public async Task<List<T>> List(int count, int page)
+        {
+            return await _dbContext.Set<T>().Take(count).Skip(page * count).ToListAsync();
         }
     }
 }
