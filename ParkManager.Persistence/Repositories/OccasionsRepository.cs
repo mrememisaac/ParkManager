@@ -4,9 +4,9 @@ using ParkManager.Persistence.DataContexts;
 
 namespace ParkManager.Persistence.Repositories
 {
-    public class ParksRepository : BaseRepository<Park>, IParksRepository
+    public class OccasionsRepository : BaseRepository<Occasion>, IOccasionsRepository
     {
-        public ParksRepository(ParkManagerDbContext dbContext) : base(dbContext)
+        public OccasionsRepository(ParkManagerDbContext dbContext) : base(dbContext)
         {
         }
     }

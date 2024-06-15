@@ -6,7 +6,7 @@ namespace ParkManager.Persistence.Repositories
 {
     public class DeparturesRepository : BaseRepository<Departure>, IDeparturesRepository
     {
-        public DeparturesRepository(ParkMangerDbContext dbContext) : base(dbContext)
+        public DeparturesRepository(ParkManagerDbContext dbContext) : base(dbContext)
         {
         }
     }

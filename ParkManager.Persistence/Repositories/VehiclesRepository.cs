@@ -6,7 +6,7 @@ namespace ParkManager.Persistence.Repositories
 {
     public class VehiclesRepository : BaseRepository<Vehicle>, IVehiclesRepository
     {
-        public VehiclesRepository(ParkMangerDbContext dbContext) : base(dbContext)
+        public VehiclesRepository(ParkManagerDbContext dbContext) : base(dbContext)
         {
         }
     }

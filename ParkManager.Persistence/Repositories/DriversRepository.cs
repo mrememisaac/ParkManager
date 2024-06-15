@@ -6,7 +6,7 @@ namespace ParkManager.Persistence.Repositories
 {
     public class DriversRepository : BaseRepository<Driver>, IDriversRepository
     {
-        public DriversRepository(ParkMangerDbContext dbContext) : base(dbContext)
+        public DriversRepository(ParkManagerDbContext dbContext) : base(dbContext)
         {
         }
     }

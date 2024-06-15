@@ -4,9 +4,9 @@ using ParkManager.Persistence.DataContexts;
 
 namespace ParkManager.Persistence.Repositories
 {
-    public class ParksRepository : BaseRepository<Park>, IParksRepository
+    public class LanesRepository : BaseRepository<Lane>, ILanesRepository
     {
-        public ParksRepository(ParkManagerDbContext dbContext) : base(dbContext)
+        public LanesRepository(ParkManagerDbContext dbContext) : base(dbContext)
         {
         }
     }

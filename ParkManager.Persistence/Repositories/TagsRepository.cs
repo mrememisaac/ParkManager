@@ -6,7 +6,7 @@ namespace ParkManager.Persistence.Repositories
 {
     public class TagsRepository : BaseRepository<Tag>, ITagsRepository
     {
-        public TagsRepository(ParkMangerDbContext dbContext) : base(dbContext)
+        public TagsRepository(ParkManagerDbContext dbContext) : base(dbContext)
         {
         }
     }
