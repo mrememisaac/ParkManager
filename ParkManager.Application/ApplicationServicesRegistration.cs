@@ -45,6 +45,12 @@ namespace ParkManager.Application
             services.AddSingleton<UpdateTagCommandValidator>();
             services.AddSingleton<AddVehicleCommandValidator>();
             services.AddSingleton<UpdateVehicleCommandValidator>();
+            services.AddSingleton<AddLaneCommandValidator>();
+            services.AddSingleton<UpdateLaneCommandValidator>();
+            services.AddSingleton<AddSlotCommandValidator>();
+            services.AddSingleton<UpdateSlotCommandValidator>();
+            services.AddSingleton<AddOccasionCommandValidator>();
+            services.AddSingleton<UpdateOccasionCommandValidator>();
             return services;
         }
     }
