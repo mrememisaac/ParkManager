@@ -5,6 +5,7 @@ using ParkManager.Application.Features.Drivers.Commands.AddDriver;
 using ParkManager.Application.Features.Drivers.Commands.RemoveDriver;
 using ParkManager.Application.Features.Drivers.Commands.UpdateDriver;
 using ParkManager.Application.Features.Drivers.Queries.GetDriver;
+using ParkManager.Application.Features.Drivers.Queries.GetDrivers;
 
 
 namespace ParkManager.Api.Controllers
@@ -22,39 +23,57 @@ namespace ParkManager.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<Models.Driver> Get(Guid id)
+        [HttpGet("{id}", Name = "GetDriver")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetDriverQueryResponse>> Get(Guid id)
         {
             var query = new GetDriverQuery(id);
             var commandResponse = await _mediator.Send(query);
-            var response = _mapper.Map<Models.Driver>(commandResponse);
-            return response;
+            return commandResponse != null ? Ok(commandResponse) : NotFound();
         }
 
-        [HttpPost]
-        public async Task<Models.Driver> Post(Models.Driver driver)
+        [HttpGet(Name = "ListDrivers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetDriversQueryResponse>> List(int page = 0, int count = 100)
         {
-            var command = _mapper.Map<AddDriverCommand>(driver);
-            var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Driver>(commandResponse);
-            return response;
+            var query = new GetDriversQuery(page, count);
+            var commandResponse = await _mediator.Send(query);
+            return Ok(commandResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<Models.Driver> Put(Guid id, [FromBody] Models.Driver driver)
+        [HttpPost(Name = "AddDriver")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<AddDriverCommandResponse>> Post(Models.Driver vehicle)
         {
-            var command = _mapper.Map<UpdateDriverCommand>(driver);
+            var command = _mapper.Map<AddDriverCommand>(vehicle);
             var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Driver>(commandResponse);
-            return response;
+            return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
+        }
+
+        [HttpPut(Name = "UpdateDriver")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Put([FromBody] Models.Driver vehicle)
+        {
+            var command = _mapper.Map<UpdateDriverCommand>(vehicle);
+            await _mediator.Send(command);
+            return NoContent();
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpDelete("{id}", Name = "DeleteDriver")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var command = new RemoveDriverCommand(id);
             await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

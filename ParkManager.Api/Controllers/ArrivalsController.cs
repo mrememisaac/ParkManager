@@ -5,6 +5,7 @@ using ParkManager.Application.Features.Arrivals.Commands.AddArrival;
 using ParkManager.Application.Features.Arrivals.Commands.RemoveArrival;
 using ParkManager.Application.Features.Arrivals.Commands.UpdateArrival;
 using ParkManager.Application.Features.Arrivals.Queries.GetArrival;
+using ParkManager.Application.Features.Arrivals.Queries.GetArrivals;
 
 
 namespace ParkManager.Api.Controllers
@@ -22,39 +23,57 @@ namespace ParkManager.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<Models.Arrival> Get(Guid id)
+        [HttpGet("{id}", Name = "GetArrival")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetArrivalQueryResponse>> Get(Guid id)
         {
             var query = new GetArrivalQuery(id);
             var commandResponse = await _mediator.Send(query);
-            var response = _mapper.Map<Models.Arrival>(commandResponse);
-            return response;
+            return commandResponse != null ? Ok(commandResponse) : NotFound();
         }
 
-        [HttpPost]
-        public async Task<Models.Arrival> Post(Models.Arrival arrival)
+        [HttpGet(Name = "ListArrivals")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetArrivalsQueryResponse>> List(int page = 0, int count = 100)
         {
-            var command = _mapper.Map<AddArrivalCommand>(arrival);
-            var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Arrival>(commandResponse);
-            return response;
+            var query = new GetArrivalsQuery(page, count);
+            var commandResponse = await _mediator.Send(query);
+            return Ok(commandResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<Models.Arrival> Put(Guid id, [FromBody] Models.Arrival arrival)
+        [HttpPost(Name = "AddArrival")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<AddArrivalCommandResponse>> Post(Models.Arrival vehicle)
         {
-            var command = _mapper.Map<UpdateArrivalCommand>(arrival);
+            var command = _mapper.Map<AddArrivalCommand>(vehicle);
             var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Arrival>(commandResponse);
-            return response;
+            return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
+        }
+
+        [HttpPut(Name = "UpdateArrival")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Put([FromBody] Models.Arrival vehicle)
+        {
+            var command = _mapper.Map<UpdateArrivalCommand>(vehicle);
+            await _mediator.Send(command);
+            return NoContent();
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpDelete("{id}", Name = "DeleteArrival")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var command = new RemoveArrivalCommand(id);
             await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

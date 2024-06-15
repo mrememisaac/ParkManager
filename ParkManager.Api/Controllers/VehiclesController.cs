@@ -5,6 +5,7 @@ using ParkManager.Application.Features.Vehicles.Commands.AddVehicle;
 using ParkManager.Application.Features.Vehicles.Commands.RemoveVehicle;
 using ParkManager.Application.Features.Vehicles.Commands.UpdateVehicle;
 using ParkManager.Application.Features.Vehicles.Queries.GetVehicle;
+using ParkManager.Application.Features.Vehicles.Queries.GetVehicles;
 
 
 namespace ParkManager.Api.Controllers
@@ -22,39 +23,57 @@ namespace ParkManager.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<Models.Vehicle> Get(Guid id)
+        [HttpGet("{id}", Name = "GetVehicle")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetVehicleQueryResponse>> Get(Guid id)
         {
             var query = new GetVehicleQuery(id);
             var commandResponse = await _mediator.Send(query);
-            var response = _mapper.Map<Models.Vehicle>(commandResponse);
-            return response;
+            return commandResponse != null ? Ok(commandResponse) : NotFound();
         }
 
-        [HttpPost]
-        public async Task<Models.Vehicle> Post(Models.Vehicle vehicle)
+        [HttpGet(Name = "ListVehicles")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetVehiclesQueryResponse>> List(int page = 0, int count = 100)
+        {
+            var query = new GetVehiclesQuery(page, count);
+            var commandResponse = await _mediator.Send(query);
+            return Ok(commandResponse);
+        }
+
+        [HttpPost(Name = "AddVehicle")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<AddVehicleCommandResponse>> Post(Models.Vehicle vehicle)
         {
             var command = _mapper.Map<AddVehicleCommand>(vehicle);
             var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Vehicle>(commandResponse);
-            return response;
+            return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<Models.Vehicle> Put(Guid id, [FromBody] Models.Vehicle vehicle)
+        [HttpPut(Name ="UpdateVehicle")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Put([FromBody] Models.Vehicle vehicle)
         {
             var command = _mapper.Map<UpdateVehicleCommand>(vehicle);
-            var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Vehicle>(commandResponse);
-            return response;
+            await _mediator.Send(command);            
+            return NoContent();
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpDelete("{id}", Name ="DeleteVehicle")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var command = new RemoveVehicleCommand(id);
             await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

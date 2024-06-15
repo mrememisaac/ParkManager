@@ -5,6 +5,7 @@ using ParkManager.Application.Features.Occasions.Commands.AddOccasion;
 using ParkManager.Application.Features.Occasions.Commands.RemoveOccasion;
 using ParkManager.Application.Features.Occasions.Commands.UpdateOccasion;
 using ParkManager.Application.Features.Occasions.Queries.GetOccasion;
+using ParkManager.Application.Features.Occasions.Queries.GetOccasions;
 
 
 namespace ParkManager.Api.Controllers
@@ -22,39 +23,57 @@ namespace ParkManager.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<Models.Occasion> Get(Guid id)
+        [HttpGet("{id}", Name = "GetOccasion")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetOccasionQueryResponse>> Get(Guid id)
         {
             var query = new GetOccasionQuery(id);
             var commandResponse = await _mediator.Send(query);
-            var response = _mapper.Map<Models.Occasion>(commandResponse);
-            return response;
+            return commandResponse != null ? Ok(commandResponse) : NotFound();
         }
 
-        [HttpPost]
-        public async Task<Models.Occasion> Post(Models.Occasion vehicle)
+        [HttpGet(Name = "ListOccasions")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetOccasionsQueryResponse>> List(int page = 0, int count = 100)
+        {
+            var query = new GetOccasionsQuery(page, count);
+            var commandResponse = await _mediator.Send(query);
+            return Ok(commandResponse);
+        }
+
+        [HttpPost(Name = "AddOccasion")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<AddOccasionCommandResponse>> Post(Models.Occasion vehicle)
         {
             var command = _mapper.Map<AddOccasionCommand>(vehicle);
             var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Occasion>(commandResponse);
-            return response;
+            return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<Models.Occasion> Put(Guid id, [FromBody] Models.Occasion vehicle)
+        [HttpPut(Name = "UpdateOccasion")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Put([FromBody] Models.Occasion vehicle)
         {
             var command = _mapper.Map<UpdateOccasionCommand>(vehicle);
-            var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Occasion>(commandResponse);
-            return response;
+            await _mediator.Send(command);
+            return NoContent();
         }
 
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpDelete("{id}", Name = "DeleteOccasion")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var command = new RemoveOccasionCommand(id);
             await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

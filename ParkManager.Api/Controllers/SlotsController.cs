@@ -5,6 +5,8 @@ using ParkManager.Application.Features.Slots.Commands.AddSlot;
 using ParkManager.Application.Features.Slots.Commands.RemoveSlot;
 using ParkManager.Application.Features.Slots.Commands.UpdateSlot;
 using ParkManager.Application.Features.Slots.Queries.GetSlot;
+using ParkManager.Application.Features.Slots.Queries.GetSlots;
+
 
 namespace ParkManager.Api.Controllers
 {
@@ -21,38 +23,57 @@ namespace ParkManager.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
-        public async Task<Models.Slot> Get(Guid id)
+        [HttpGet("{id}", Name = "GetSlot")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetSlotQueryResponse>> Get(Guid id)
         {
             var query = new GetSlotQuery(id);
             var commandResponse = await _mediator.Send(query);
-            var response = _mapper.Map<Models.Slot>(commandResponse);
-            return response;
+            return commandResponse != null ? Ok(commandResponse) : NotFound();
         }
 
-        [HttpPost]
-        public async Task<Models.Slot> Post(Models.Slot slot)
+        [HttpGet(Name = "ListSlots")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<GetSlotsQueryResponse>> List(int page = 0, int count = 100)
         {
-            var command = _mapper.Map<AddSlotCommand>(slot);
-            var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Slot>(commandResponse);
-            return response;
+            var query = new GetSlotsQuery(page, count);
+            var commandResponse = await _mediator.Send(query);
+            return Ok(commandResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<Models.Slot> Put(Guid id, [FromBody] Models.Slot slot)
+        [HttpPost(Name = "AddSlot")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<AddSlotCommandResponse>> Post(Models.Slot vehicle)
         {
-            var command = _mapper.Map<UpdateSlotCommand>(slot);
+            var command = _mapper.Map<AddSlotCommand>(vehicle);
             var commandResponse = await _mediator.Send(command);
-            var response = _mapper.Map<Models.Slot>(commandResponse);
-            return response;
+            return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
         }
 
-        [HttpDelete("{id}")]
-        public async Task Delete(Guid id)
+        [HttpPut(Name = "UpdateSlot")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Put([FromBody] Models.Slot vehicle)
+        {
+            var command = _mapper.Map<UpdateSlotCommand>(vehicle);
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}", Name = "DeleteSlot")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var command = new RemoveSlotCommand(id);
             await _mediator.Send(command);
+            return NoContent();
         }
-    }    
+    }
 }
