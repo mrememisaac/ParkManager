@@ -10,14 +10,14 @@ namespace ParkManager.UnitTests
         public void Constructor_ShouldInitializeProperties()
         {
             // Arrange
-            var parkId = Guid.NewGuid();
+            var vehicleId = Guid.NewGuid();
             var path = "test/path";
 
             // Act
-            var vehicleImage = new VehicleImage(parkId, path);
+            var vehicleImage = new VehicleImage(vehicleId, path);
 
             // Assert
-            Assert.Equal(parkId, vehicleImage.ParkId);
+            Assert.Equal(vehicleId, vehicleImage.VehicleId);
             Assert.Equal(path, vehicleImage.Path);
         }
 
@@ -25,22 +25,22 @@ namespace ParkManager.UnitTests
         public void Constructor_ShouldThrowException_WhenParkIdIsEmpty()
         {
             // Arrange
-            var parkId = Guid.Empty;
+            var vehicleId = Guid.Empty;
             var path = "test/path";
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new VehicleImage(parkId, path));
+            Assert.Throws<ArgumentException>(() => new VehicleImage(vehicleId, path));
         }
 
         [Fact]
         public void Constructor_ShouldThrowException_WhenPathIsNull()
         {
             // Arrange
-            var parkId = Guid.NewGuid();
+            var vehicleId = Guid.NewGuid();
             string path = null;
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new VehicleImage(parkId, path));
+            Assert.Throws<ArgumentNullException>(() => new VehicleImage(vehicleId, path));
         }
     }
 }
