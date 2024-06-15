@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
@@ -13,12 +14,14 @@ namespace ParkManager.UnitTests
     public class GetSlotQueryHandlerTests
     {
         private readonly Mock<ISlotsRepository> _mockSlotsRepository;
-        private readonly IRequestHandler<GetSlotQuery, Slot> _handler;
+        private readonly IRequestHandler<GetSlotQuery, GetSlotQueryResponse> _handler;
+        private readonly Mock<IMapper> _mockMapper;
 
         public GetSlotQueryHandlerTests()
         {
             _mockSlotsRepository = new Mock<ISlotsRepository>();
-            _handler = new GetSlotQueryHandler(_mockSlotsRepository.Object);
+            _mockMapper = new Mock<IMapper>();
+            _handler = new GetSlotQueryHandler(_mockSlotsRepository.Object, _mockMapper.Object);
         }
 
         [Fact]
@@ -27,7 +30,9 @@ namespace ParkManager.UnitTests
             // Arrange
             var slotId = Guid.NewGuid();
             var expectedSlot = new Slot(slotId, Guid.NewGuid(), "A1");
+            var expectedResponse = new GetSlotQueryResponse() { Id = expectedSlot.Id, Name = expectedSlot.Name };
             _mockSlotsRepository.Setup(repo => repo.Get(slotId)).ReturnsAsync(expectedSlot);
+            _mockMapper.Setup(m => m.Map<GetSlotQueryResponse>(expectedSlot)).Returns(expectedResponse);
             var query = new GetSlotQuery (slotId);
 
             // Act

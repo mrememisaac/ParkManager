@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
@@ -9,12 +10,14 @@ namespace ParkManager.UnitTests
     public class GetDepartureQueryHandlerTests
     {
         private readonly Mock<IDeparturesRepository> _mockDeparturesRepository;
-        private readonly IRequestHandler<GetDepartureQuery, Departure> _handler;
+        private readonly Mock<IMapper> _mockMapper;
+        private readonly IRequestHandler<GetDepartureQuery, GetDepartureQueryResponse> _handler;
 
         public GetDepartureQueryHandlerTests()
         {
             _mockDeparturesRepository = new Mock<IDeparturesRepository>();
-            _handler = new GetDepartureQueryHandler(_mockDeparturesRepository.Object);
+            _mockMapper = new Mock<IMapper>();
+            _handler = new GetDepartureQueryHandler(_mockDeparturesRepository.Object, _mockMapper.Object);
         }
 
         [Fact]
@@ -23,7 +26,15 @@ namespace ParkManager.UnitTests
             // Arrange
             var validId = Guid.NewGuid();
             var expectedDeparture = new Departure(validId, DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+            var expectedResponse = new GetDepartureQueryResponse
+            {
+                Id = expectedDeparture.Id,
+                DriverId = expectedDeparture.DriverId,
+                VehicleId = expectedDeparture.VehicleId,
+                ParkId = expectedDeparture.ParkId
+            };
             _mockDeparturesRepository.Setup(repo => repo.Get(validId)).ReturnsAsync(expectedDeparture);
+            _mockMapper.Setup(m => m.Map<GetDepartureQueryResponse>(expectedDeparture)).Returns(expectedResponse);
             var query = new GetDepartureQuery(validId);
 
             // Act
@@ -31,7 +42,7 @@ namespace ParkManager.UnitTests
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(expectedDeparture, result);
+            Assert.Equal(expectedResponse, result);
         }
 
         [Fact]

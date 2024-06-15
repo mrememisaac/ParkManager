@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
@@ -9,12 +10,14 @@ namespace ParkManager.UnitTests
     public class GetArrivalQueryHandlerTests
     {
         private readonly Mock<IArrivalsRepository> _mockArrivalsRepository;
-        private readonly IRequestHandler<GetArrivalQuery, Arrival> _handler;
+        private readonly IRequestHandler<GetArrivalQuery, GetArrivalQueryResponse> _handler;
+        private readonly Mock<IMapper> _mapper;
 
         public GetArrivalQueryHandlerTests()
         {
+            _mapper = new Mock<IMapper>();
             _mockArrivalsRepository = new Mock<IArrivalsRepository>();
-            _handler = new GetArrivalQueryHandler(_mockArrivalsRepository.Object);
+            _handler = new GetArrivalQueryHandler(_mockArrivalsRepository.Object, _mapper.Object);
         }
 
         [Fact]
@@ -22,8 +25,18 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var validId = Guid.NewGuid();
-            var expectedArrival = new Arrival(validId, DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+            var expectedArrival = new Arrival(validId, DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());            
             _mockArrivalsRepository.Setup(repo => repo.Get(validId)).ReturnsAsync(expectedArrival);
+            var expectedResponse = new GetArrivalQueryResponse
+            {
+                Id = validId,
+                Timestamp = expectedArrival.Timestamp,
+                DriverId = expectedArrival.DriverId,
+                ParkId = expectedArrival.ParkId,
+                VehicleId = expectedArrival.VehicleId,
+                TagId = expectedArrival.TagId
+            };
+            _mapper.Setup(m => m.Map<GetArrivalQueryResponse>(expectedArrival)).Returns(expectedResponse);
             var query = new GetArrivalQuery(validId);
 
             // Act
@@ -31,7 +44,7 @@ namespace ParkManager.UnitTests
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(expectedArrival, result);
+            Assert.Equal(expectedResponse, result);
         }
 
         [Fact]

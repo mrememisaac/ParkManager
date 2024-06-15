@@ -1,8 +1,10 @@
+using AutoMapper;
 using MediatR;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Parks.Commands.UpdatePark;
 using ParkManager.Application.Features.Parks.Queries.GetPark;
+using ParkManager.Application.Features.Slots.Queries.GetSlot;
 using ParkManager.Domain;
 
 namespace ParkManager.UnitTests
@@ -10,12 +12,14 @@ namespace ParkManager.UnitTests
     public class GetParkQueryHandlerTests
     {
         private readonly Mock<IParksRepository> _mockParksRepository;
-        private readonly IRequestHandler<GetParkQuery, Park> _handler;
+        private readonly IRequestHandler<GetParkQuery, GetParkQueryResponse> _handler;
+        private readonly Mock<IMapper> _mockMapper;
 
         public GetParkQueryHandlerTests()
         {
             _mockParksRepository = new Mock<IParksRepository>();
-            _handler = new GetParkQueryHandler(_mockParksRepository.Object);
+            _mockMapper = new Mock<IMapper>();
+            _handler = new GetParkQueryHandler(_mockParksRepository.Object, _mockMapper.Object);
         }
 
         [Fact]
@@ -35,7 +39,19 @@ namespace ParkManager.UnitTests
                 Longitude = 0,
             };
             var expectedPark = new Park(command.Id, command.Name, command.Street, command.City, command.State, command.Country, command.Latitude, command.Longitude);
+            var expectedResponse = new GetParkQueryResponse
+            {
+                Id = expectedPark.Id,
+                City = expectedPark.City,
+                Name = expectedPark.Name,
+                Street = expectedPark.Street,
+                State = expectedPark.State,
+                Country = expectedPark.Country,
+                Latitude = expectedPark.Latitude,
+                Longitude = expectedPark.Longitude
+            };
             _mockParksRepository.Setup(repo => repo.Get(parkId)).ReturnsAsync(expectedPark);
+            _mockMapper.Setup(m => m.Map<GetParkQueryResponse>(expectedPark)).Returns(expectedResponse);
             var query = new GetParkQuery(parkId);
 
             // Act

@@ -1,7 +1,9 @@
+using AutoMapper;
 using MediatR;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Occasions.Queries.GetOccasion;
+using ParkManager.Application.Features.Parks.Queries.GetPark;
 using ParkManager.Domain;
 using System;
 using System.Threading;
@@ -13,12 +15,14 @@ namespace ParkManager.UnitTests
     public class GetOccasionQueryHandlerTests
     {
         private readonly Mock<IOccasionsRepository> _mockOccasionsRepository;
-        private readonly IRequestHandler<GetOccasionQuery, Occasion> _handler;
+        private readonly IRequestHandler<GetOccasionQuery, GetOccasionQueryResponse> _handler;
+        private readonly Mock<IMapper> _mockMapper;
 
         public GetOccasionQueryHandlerTests()
         {
             _mockOccasionsRepository = new Mock<IOccasionsRepository>();
-            _handler = new GetOccasionQueryHandler(_mockOccasionsRepository.Object);
+            _mockMapper = new Mock<IMapper>();
+            _handler = new GetOccasionQueryHandler(_mockOccasionsRepository.Object, _mockMapper.Object);
         }
 
         [Fact]
@@ -27,7 +31,15 @@ namespace ParkManager.UnitTests
             // Arrange
             var occasionId = Guid.NewGuid();
             var expectedOccasion = new Occasion(occasionId, "Occasion 1", DateTime.Now, DateTime.Now.AddDays(1));
+            var expectedResponse = new GetOccasionQueryResponse
+            {
+                Id = expectedOccasion.Id,
+                EndDate = expectedOccasion.EndDate,
+                Name = expectedOccasion.Name,
+                StartDate = expectedOccasion.StartDate
+            };
             _mockOccasionsRepository.Setup(repo => repo.Get(occasionId)).ReturnsAsync(expectedOccasion);
+            _mockMapper.Setup(m => m.Map<GetOccasionQueryResponse>(expectedOccasion)).Returns(expectedResponse);
             var query = new GetOccasionQuery(occasionId);
 
             // Act
