@@ -6,5 +6,7 @@
         Task<Entity> Update(Entity entity);
         Task<Entity> Get(Guid id);
         Task Delete(Guid id);
+        Task<List<Entity>> List(int count, int page);
+
     }
 }
