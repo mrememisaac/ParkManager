@@ -1,21 +1,25 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Features.Occasions.Queries.GetOccasion
 {
-    public class GetOccasionQueryHandler : IRequestHandler<GetOccasionQuery, Occasion>
+    public class GetOccasionQueryHandler : IRequestHandler<GetOccasionQuery, GetOccasionQueryResponse>
     {
         private readonly IOccasionsRepository _occasionsRepository;
-        
-        public GetOccasionQueryHandler(IOccasionsRepository occasionRepository)
+        private readonly IMapper _mapper;
+
+        public GetOccasionQueryHandler(IOccasionsRepository occasionRepository, IMapper mapper)
         {
             _occasionsRepository = occasionRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Occasion> Handle(GetOccasionQuery request, CancellationToken cancellationToken)
+        public async Task<GetOccasionQueryResponse> Handle(GetOccasionQuery request, CancellationToken cancellationToken)
         {
-            return await _occasionsRepository.Get(request.Id);
+            var occassion = await _occasionsRepository.Get(request.Id);
+            return _mapper.Map< GetOccasionQueryResponse>(occassion);
         }
     }
 }

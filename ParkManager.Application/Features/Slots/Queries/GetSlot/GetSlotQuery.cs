@@ -3,7 +3,7 @@ using ParkManager.Domain;
 
 namespace ParkManager.Application.Features.Slots.Queries.GetSlot
 {
-    public class GetSlotQuery : IRequest<Slot>
+    public class GetSlotQuery : IRequest<GetSlotQueryResponse>
     {
         public Guid Id { get; set; }
 

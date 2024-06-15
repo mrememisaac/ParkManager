@@ -3,7 +3,7 @@ using ParkManager.Domain;
 
 namespace ParkManager.Application.Features.Parks.Queries.GetPark
 {
-    public class GetParkQuery : IRequest<Park>
+    public class GetParkQuery : IRequest<GetParkQueryResponse>
     {
         public Guid Id { get; set; }
 

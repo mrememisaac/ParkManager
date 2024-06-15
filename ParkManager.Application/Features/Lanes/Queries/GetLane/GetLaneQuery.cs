@@ -3,7 +3,7 @@ using ParkManager.Domain;
 
 namespace ParkManager.Application.Features.Lanes.Queries.GetLane
 {
-    public class GetLaneQuery : IRequest<Lane>
+    public class GetLaneQuery : IRequest<GetLaneQueryResponse>
     {
         public Guid Id { get; set; }
 

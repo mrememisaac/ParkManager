@@ -1,21 +1,25 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Features.Parks.Queries.GetPark
 {
-    public class GetParkQueryHandler : IRequestHandler<GetParkQuery, Park>
+    public class GetParkQueryHandler : IRequestHandler<GetParkQuery, GetParkQueryResponse>
     {
         private readonly IParksRepository _parksRepository;
-        
-        public GetParkQueryHandler(IParksRepository parkRepository)
+        private readonly IMapper _mapper;
+
+        public GetParkQueryHandler(IParksRepository parkRepository, IMapper mapper)
         {
             _parksRepository = parkRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Park> Handle(GetParkQuery request, CancellationToken cancellationToken)
+        public async Task<GetParkQueryResponse> Handle(GetParkQuery request, CancellationToken cancellationToken)
         {
-            return await _parksRepository.Get(request.Id);
+            var park = await _parksRepository.Get(request.Id);
+            return _mapper.Map< GetParkQueryResponse>(park);
         }
     }
 }
