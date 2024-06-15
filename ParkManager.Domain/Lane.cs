@@ -8,6 +8,10 @@ namespace ParkManager.Domain
     /// </summary>
     public class Lane : Entity
     {
+        private Lane()
+        {
+            
+        }
         /// <summary>
         /// Gets the ID of the park associated with the lane.
         /// </summary>
@@ -26,7 +30,7 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets a read-only collection of Lane slots.
         /// </summary>
-        public ReadOnlyCollection<Slot> Slots => _slots.AsReadOnly();
+        public IReadOnlyCollection<Slot> Slots => _slots.AsReadOnly();
 
         private List<Slot> _slots = new List<Slot>();
 

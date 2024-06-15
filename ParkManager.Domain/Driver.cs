@@ -7,6 +7,11 @@ namespace ParkManager.Domain
     /// </summary>
     public class Driver : Entity
     {
+        private Driver()
+        {
+            
+        }
+
         /// <summary>
         /// Gets or sets the name of the driver.
         /// </summary>
@@ -32,13 +37,13 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets a read-only collection of driver metadata.
         /// </summary>
-        public ReadOnlyCollection<DriverMetadata> DriverDetails => _details.AsReadOnly();
+        public IReadOnlyCollection<DriverMetadata> DriverDetails => _details.AsReadOnly();
 
         /// <summary>
         /// A list of driver metadata.
         /// This field is used internally to manage the collection of driver metadata.
         /// </summary>
-        public List<DriverMetadata> _details = new List<DriverMetadata>();
+        private List<DriverMetadata> _details = new List<DriverMetadata>();
 
         /// <summary>
         /// Adds a driver metadata to the collection.

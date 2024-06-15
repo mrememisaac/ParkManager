@@ -5,6 +5,10 @@
     /// </summary>
     public class Occasion : Entity
     {
+        private Occasion()
+        {
+            
+        }
         /// <summary>
         /// Gets or sets the name of the occasion.
         /// </summary>

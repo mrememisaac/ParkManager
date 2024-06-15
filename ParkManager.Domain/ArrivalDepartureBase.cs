@@ -10,27 +10,27 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets or sets the timestamp of the arrival or departure.
         /// </summary>
-        public DateTime Timestamp { get; protected set; }
+        public DateTime Timestamp { get; protected set; } = default;
 
         /// <summary>
         /// Gets or sets the ID of the park associated with the arrival or departure.
         /// </summary>
-        public Guid ParkId { get; protected set; }
+        public Guid ParkId { get; protected set; } = default;
 
         /// <summary>
         /// Gets or sets the ID of the vehicle associated with the arrival or departure.
         /// </summary>
-        public Guid VehicleId { get; protected set; }
+        public Guid VehicleId { get; protected set; } = default;
 
         /// <summary>
         /// Gets or sets the ID of the driver associated with the arrival or departure.
         /// </summary>
-        public Guid DriverId { get; protected set; }
+        public Guid DriverId { get; protected set; } = default;
 
         /// <summary>
         /// Gets or sets the ID of the tag associated with the arrival or departure.
         /// </summary>
-        public Guid TagId { get; protected set; }
+        public Guid TagId { get; protected set; } = default;
 
         /// <summary>
         /// Initializes a new instance of the ArrivalDepartureBase class.

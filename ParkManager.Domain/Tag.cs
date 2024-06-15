@@ -5,6 +5,10 @@
     /// </summary>
     public class Tag : Entity
     {
+        private Tag()
+        {
+            
+        }
         /// <summary>
         /// Gets or sets the tag number.
         /// </summary>

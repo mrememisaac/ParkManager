@@ -8,6 +8,11 @@ namespace ParkManager.Domain
     /// </summary>
     public class DepartureImage : Entity
     {
+        private DepartureImage()
+        {
+            
+        }
+
         /// <summary>
         /// Gets or sets the identifier of the departure event associated with the image.
         /// </summary>

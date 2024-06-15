@@ -5,10 +5,14 @@
     /// </summary>
     public class VehicleImage : Entity
     {
+        private VehicleImage()
+        {
+            
+        }
         /// <summary>
         /// Gets or sets the park ID associated with the vehicle image.
         /// </summary>
-        public Guid ParkId { get; private set; }
+        public Guid VehicleId { get; private set; }
 
         /// <summary>
         /// Gets or sets the path of the vehicle image.
@@ -18,16 +22,16 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="VehicleImage"/> class.
         /// </summary>
-        /// <param name="parkId">The park ID associated with the vehicle image.</param>
+        /// <param name="vehicleId">The vehicle ID associated with the vehicle image.</param>
         /// <param name="path">The path of the vehicle image.</param>
-        public VehicleImage(Guid parkId, string path)
+        public VehicleImage(Guid vehicleId, string path)
         {
             Path = !string.IsNullOrEmpty(path) ? path : throw new ArgumentNullException(nameof(path));
-            if (parkId == Guid.Empty)
+            if (vehicleId == Guid.Empty)
             {
-                throw new ArgumentException("Park ID cannot be empty.", nameof(parkId));
+                throw new ArgumentException("Park ID cannot be empty.", nameof(vehicleId));
             }
-            ParkId = parkId;
+            VehicleId = vehicleId;
         }
     }
 }

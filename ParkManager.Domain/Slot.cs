@@ -5,6 +5,10 @@
     /// </summary>
     public class Slot : Entity
     {
+        private Slot()
+        {
+            
+        }
         /// <summary>
         /// Gets the ID of the lane that the slot belongs to.
         /// </summary>

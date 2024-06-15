@@ -5,6 +5,10 @@
     /// </summary>
     public class ParkImage : Entity
     {
+        private ParkImage()
+        {
+            
+        }
         /// <summary>
         /// Gets or sets the ID of the park.
         /// </summary>

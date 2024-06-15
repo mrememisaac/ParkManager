@@ -7,16 +7,21 @@ namespace ParkManager.Domain
     /// </summary>
     public class Departure : ArrivalDepartureBase
     {
+        private Departure():base(DateTime.Now, Guid.NewGuid(), Guid.NewGuid(),  Guid.NewGuid(), Guid.NewGuid())
+        {
+            
+        }
+
         /// <summary>
         /// Gets the collection of departure images.
         /// </summary>
-        public ReadOnlyCollection<DepartureImage> Images => _images.AsReadOnly();
+        public IReadOnlyCollection<DepartureImage> Images => (_images as List<DepartureImage>).AsReadOnly();
 
         /// <summary>
         /// A list of images associated with the departure event.
         /// This field is used internally to manage the collection of images.
         /// </summary>
-        private List<DepartureImage> _images = new List<DepartureImage>();
+        private IList<DepartureImage> _images = new List<DepartureImage>();
 
         /// <summary>
         /// Initializes a new instance of the Departure class.

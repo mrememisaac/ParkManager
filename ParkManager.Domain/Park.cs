@@ -7,6 +7,10 @@ namespace ParkManager.Domain
     /// </summary>
     public class Park : Entity
     {
+        private Park()
+        {
+            
+        }
         /// <summary>
         /// Gets or sets the name of the park.
         /// </summary>
@@ -67,13 +71,13 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets a read-only collection of park images.
         /// </summary>
-        public ReadOnlyCollection<ParkImage> Images => _images.AsReadOnly();
+        public IReadOnlyCollection<ParkImage> Images => (_images as List<ParkImage>).AsReadOnly();
 
         /// <summary>
         /// A list of park images.
         /// This field is used internally to manage the collection of images.
         /// </summary>
-        public List<ParkImage> _images = new List<ParkImage>();
+        private IList<ParkImage> _images = [];
 
         /// <summary>
         /// Adds an image to the park.
@@ -106,13 +110,13 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets a read-only collection of park lanes.
         /// </summary>
-        public ReadOnlyCollection<Lane> Lanes => _lanes.AsReadOnly();
+        public IReadOnlyCollection<Lane> Lanes => (_lanes as List<Lane>).AsReadOnly(); 
 
         /// <summary>
         /// A list of park lanes.
         /// This field is used internally to manage the collection of lanes.
         /// </summary>
-        public List<Lane> _lanes = new List<Lane>();
+        private IList<Lane> _lanes = [];
 
         /// <summary>
         /// Adds a lane to the park.
@@ -147,5 +151,23 @@ namespace ParkManager.Domain
             _lanes.Remove(lane);
         }
 
+        public void Update(Park newVersion)
+        {
+            if(newVersion == null)
+            {
+                throw new ArgumentNullException(nameof(newVersion));
+            }
+            if(newVersion.Id != Id)
+            {
+                throw new ArgumentException("The Id of the new version must be the same as the current version");
+            }
+            Name = newVersion.Name ?? throw new ArgumentNullException(nameof(newVersion.Name));
+            Street = newVersion.Street ?? throw new ArgumentNullException(nameof(newVersion.Street));
+            City = newVersion.City ?? throw new ArgumentNullException(nameof(newVersion.City));
+            State = newVersion.State ?? throw new ArgumentNullException(nameof(newVersion.State));
+            Country = newVersion.Country ?? throw new ArgumentNullException(nameof(newVersion.Country));
+            Latitude = newVersion.Latitude;
+            Longitude = newVersion.Longitude;
+        }
     }
 }

@@ -8,6 +8,10 @@ namespace ParkManager.Domain
     /// </summary>
     public class ArrivalImage : Entity
     {
+        private ArrivalImage()
+        {
+            
+        }
         public ArrivalImage(Guid arrivalId, string path)
         {
             if (arrivalId == Guid.Empty)

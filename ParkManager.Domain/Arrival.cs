@@ -8,10 +8,15 @@ namespace ParkManager.Domain
     /// </summary>
     public class Arrival : ArrivalDepartureBase
     {
+        private Arrival() : base(DateTime.Now, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid())
+        {
+            
+        }
+
         /// <summary>
         /// Gets a read-only collection of images associated with the arrival event.
         /// </summary>
-        public ReadOnlyCollection<ArrivalImage> Images => _images.AsReadOnly();
+        public IReadOnlyCollection<ArrivalImage> Images => (_images as List<ArrivalImage>).AsReadOnly();
 
         /// <summary>
         /// A list of images associated with the arrival event.

@@ -7,6 +7,10 @@ namespace ParkManager.Domain
     /// </summary>
     public class Vehicle : Entity
     {
+        private Vehicle()
+        {
+            
+        }
         /// <summary>
         /// Gets or sets the make of the vehicle.
         /// </summary>
@@ -25,9 +29,9 @@ namespace ParkManager.Domain
         /// <summary>
         /// Gets the read-only collection of vehicle images.
         /// </summary>
-        public ReadOnlyCollection<VehicleImage> Images => _images.AsReadOnly();
+        public IReadOnlyCollection<VehicleImage> Images => (_images as List<VehicleImage>).AsReadOnly();
 
-        private List<VehicleImage> _images = new List<VehicleImage>();
+        private IList<VehicleImage> _images = new List<VehicleImage>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Vehicle"/> class.

@@ -7,6 +7,10 @@ namespace ParkManager.Domain
     /// </summary>
     public class DriverMetadata : Entity
     {
+        private DriverMetadata()
+        {
+            
+        }
         /// <summary>
         /// Gets or sets the driver ID.
         /// </summary>
