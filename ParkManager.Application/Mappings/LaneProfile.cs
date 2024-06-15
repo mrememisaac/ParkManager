@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ParkManager.Application.Features.Lanes.Commands.AddLane;
 using ParkManager.Application.Features.Lanes.Commands.UpdateLane;
+using ParkManager.Application.Features.Lanes.Queries.GetLane;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Mappings
@@ -13,6 +14,7 @@ namespace ParkManager.Application.Mappings
             CreateMap<UpdateLaneCommand, Lane>();
             CreateMap<UpdateLaneCommandResponse, Lane>().ReverseMap();
             CreateMap<AddLaneCommandResponse, Lane>().ReverseMap();
+            CreateMap<Lane, GetLaneQueryResponse>();
         }
     }
 }

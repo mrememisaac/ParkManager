@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ParkManager.Application.Features.Arrivals.Commands.AddArrival;
 using ParkManager.Application.Features.Arrivals.Commands.UpdateArrival;
+using ParkManager.Application.Features.Arrivals.Queries.GetArrival;
 using ParkManager.Domain;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace ParkManager.Application.Mappings
             CreateMap<UpdateArrivalCommand, Arrival>();
             CreateMap<UpdateArrivalCommandResponse, Arrival>().ReverseMap();
             CreateMap<AddArrivalCommandResponse, Arrival>().ReverseMap();
+            CreateMap<Arrival, GetArrivalQueryResponse>();
         }
     }
 }

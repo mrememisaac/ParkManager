@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ParkManager.Application.Features.Drivers.Commands.AddDriver;
 using ParkManager.Application.Features.Drivers.Commands.UpdateDriver;
+using ParkManager.Application.Features.Drivers.Queries.GetDriver;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Mappings
@@ -13,6 +14,7 @@ namespace ParkManager.Application.Mappings
             CreateMap<UpdateDriverCommand, Driver>();
             CreateMap<UpdateDriverCommandResponse, Driver>().ReverseMap();
             CreateMap<AddDriverCommandResponse, Driver>().ReverseMap();
+            CreateMap<Driver, GetDriverQueryResponse>();
         }
     }
 }

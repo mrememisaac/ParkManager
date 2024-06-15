@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ParkManager.Application.Features.Slots.Commands.AddSlot;
 using ParkManager.Application.Features.Slots.Commands.UpdateSlot;
+using ParkManager.Application.Features.Slots.Queries.GetSlot;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Mappings
@@ -13,6 +14,7 @@ namespace ParkManager.Application.Mappings
             CreateMap<UpdateSlotCommand, Slot>();
             CreateMap<UpdateSlotCommandResponse, Slot>().ReverseMap();
             CreateMap<AddSlotCommandResponse, Slot>().ReverseMap();
+            CreateMap<Slot, GetSlotQueryResponse>();
         }
     }
 }

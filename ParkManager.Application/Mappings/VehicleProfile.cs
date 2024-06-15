@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ParkManager.Application.Features.Vehicles.Commands.AddVehicle;
 using ParkManager.Application.Features.Vehicles.Commands.UpdateVehicle;
+using ParkManager.Application.Features.Vehicles.Queries.GetVehicle;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Mappings
@@ -13,6 +14,7 @@ namespace ParkManager.Application.Mappings
             CreateMap<UpdateVehicleCommand, Vehicle>();
             CreateMap<UpdateVehicleCommandResponse, Vehicle>().ReverseMap();
             CreateMap<AddVehicleCommandResponse, Vehicle>().ReverseMap();
+            CreateMap<Vehicle, GetVehicleQueryResponse>();
         }
     }
 }

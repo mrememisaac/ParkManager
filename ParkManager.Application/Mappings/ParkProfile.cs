@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ParkManager.Application.Features.Parks.Commands.AddPark;
 using ParkManager.Application.Features.Parks.Commands.UpdatePark;
+using ParkManager.Application.Features.Parks.Queries.GetPark;
 using ParkManager.Domain;
 
 namespace ParkManager.Application.Mappings
@@ -13,6 +14,7 @@ namespace ParkManager.Application.Mappings
             CreateMap<UpdateParkCommand, Park>();
             CreateMap<UpdateParkCommandResponse, Park>().ReverseMap();
             CreateMap<AddParkCommandResponse, Park>().ReverseMap();
+            CreateMap<Park, GetParkQueryResponse>();
         }
     }
 }
