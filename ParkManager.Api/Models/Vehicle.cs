@@ -1,6 +1,6 @@
 ﻿namespace ParkManager.Api.Models
 {
-    public record Vehicle(string Make, string Model, string Registration)
+    public record Vehicle(Guid Id, string Make, string Model, string Registration)
     {
     }
 }
