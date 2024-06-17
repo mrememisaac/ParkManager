@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkManager.Persistence.DataContexts;
 
@@ -11,11 +10,9 @@ using ParkManager.Persistence.DataContexts;
 namespace ParkManager.Persistence.Migrations
 {
     [DbContext(typeof(ParkManagerDbContext))]
-    [Migration("20240613223934_InitialCreate")]
-    partial class InitialCreate
+    partial class ParkManagerDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -129,7 +126,7 @@ namespace ParkManager.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departures");
+                    b.ToTable("Departures", (string)null);
                 });
 
             modelBuilder.Entity("ParkManager.Domain.DepartureImage", b =>
