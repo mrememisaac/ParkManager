@@ -6,12 +6,12 @@ namespace ParkManager.Persistence.Configurations
 {
     public class DepartureConfiguration : ArrivalDepartureBaseConfiguration<Departure>
     {
-        public void Configure(EntityTypeBuilder<Departure> builder)
+        public override void Configure(EntityTypeBuilder<Departure> builder)
         {
             builder.ToTable("Departures");
 
-            // Assuming Id is a property inherited from a base class
-            builder.HasKey(a => a.Id);
+            //// Assuming Id is a property inherited from a base class
+            //builder.HasKey(a => a.Id);
 
 
             // Configure the one-to-many relationship between Departure and DepartureImage
@@ -21,6 +21,7 @@ namespace ParkManager.Persistence.Configurations
                    .OnDelete(DeleteBehavior.Cascade); // Configure cascade delete as per your domain requirements
 
             // Additional configurations as needed
+            base.Configure(builder);
         }
     }
 }

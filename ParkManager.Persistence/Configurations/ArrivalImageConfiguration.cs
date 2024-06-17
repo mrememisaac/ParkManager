@@ -5,13 +5,13 @@ using ParkManager.Domain;
 namespace ParkManager.Persistence.Configurations
 {
 
-    public class ArrivalImageConfiguration : IEntityTypeConfiguration<ArrivalImage>
+    public class ArrivalImageConfiguration : EntityConfiguration<ArrivalImage>, IEntityTypeConfiguration<ArrivalImage>
     {
         public void Configure(EntityTypeBuilder<ArrivalImage> builder)
         {
             builder.ToTable("ArrivalImages");
 
-            builder.HasKey(ai => ai.Id);
+            //builder.HasKey(ai => ai.Id);
 
             builder.Property(ai => ai.ArrivalId)
                 .IsRequired();

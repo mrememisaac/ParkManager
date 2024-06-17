@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ParkManager.Domain;
 
-public class ArrivalDepartureBaseConfiguration<T> : IEntityTypeConfiguration<T> where T : ArrivalDepartureBase
+public class ArrivalDepartureBaseConfiguration<T> : EntityConfiguration<T>, IEntityTypeConfiguration<T> where T : ArrivalDepartureBase
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {

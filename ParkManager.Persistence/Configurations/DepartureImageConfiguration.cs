@@ -4,13 +4,13 @@ using ParkManager.Domain;
 
 namespace ParkManager.Persistence.Configurations
 {
-    public class DepartureImageConfiguration : IEntityTypeConfiguration<DepartureImage>
+    public class DepartureImageConfiguration : EntityConfiguration<DepartureImage>, IEntityTypeConfiguration<DepartureImage>
     {
         public void Configure(EntityTypeBuilder<DepartureImage> builder)
         {
             builder.ToTable("DepartureImages");
 
-            builder.HasKey(ai => ai.Id);
+            //builder.HasKey(ai => ai.Id);
 
             builder.Property(ai => ai.DepartureId)
                 .IsRequired();

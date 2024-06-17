@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ParkManager.Domain;
 
-public class SlotConfiguration : IEntityTypeConfiguration<Slot>
+public class SlotConfiguration : EntityConfiguration<Slot>, IEntityTypeConfiguration<Slot>
 {
     public void Configure(EntityTypeBuilder<Slot> builder)
     {
         builder.ToTable("Slots");
 
-        builder.HasKey(s => s.Id);
+        //builder.HasKey(s => s.Id);
 
         builder.Property(s => s.LaneId).IsRequired();
         builder.Property(s => s.Name).IsRequired().HasMaxLength(50); // Assuming a max length for the name

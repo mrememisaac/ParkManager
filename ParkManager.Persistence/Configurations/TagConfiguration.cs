@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ParkManager.Domain;
 
-public class TagConfiguration : IEntityTypeConfiguration<Tag>
+public class TagConfiguration : EntityConfiguration<Tag>, IEntityTypeConfiguration<Tag>
 {
     public void Configure(EntityTypeBuilder<Tag> builder)
     {
         builder.ToTable("Tags");
 
-        builder.HasKey(t => t.Id);
+        //builder.HasKey(t => t.Id);
 
         builder.Property(t => t.Number)
                .IsRequired();

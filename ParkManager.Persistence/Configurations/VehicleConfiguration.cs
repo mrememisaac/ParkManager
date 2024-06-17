@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ParkManager.Domain;
 
-public class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
+public class VehicleConfiguration : EntityConfiguration<Vehicle>, IEntityTypeConfiguration<Vehicle>
 {
     public void Configure(EntityTypeBuilder<Vehicle> builder)
     {
         builder.ToTable("Vehicles");
 
-        builder.HasKey(v => v.Id);
+        //builder.HasKey(v => v.Id);
 
         builder.Property(v => v.Make).IsRequired().HasMaxLength(255); // Assuming a max length for the make
         builder.Property(v => v.Model).IsRequired().HasMaxLength(255); // Assuming a max length for the model

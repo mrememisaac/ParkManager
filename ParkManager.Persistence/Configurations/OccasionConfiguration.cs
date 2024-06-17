@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ParkManager.Domain;
 
-public class OccasionConfiguration : IEntityTypeConfiguration<Occasion>
+public class OccasionConfiguration : EntityConfiguration<Occasion>, IEntityTypeConfiguration<Occasion>
 {
     public void Configure(EntityTypeBuilder<Occasion> builder)
     {
         builder.ToTable("Occasions");
 
-        builder.HasKey(o => o.Id);
+        //builder.HasKey(o => o.Id);
 
         builder.Property(o => o.Name)
                .IsRequired()

@@ -11,7 +11,7 @@ namespace ParkManager.Persistence.Configurations
             builder.ToTable("Arrivals");
 
             // Assuming Id is a property inherited from a base class
-            builder.HasKey(a => a.Id);
+            //builder.HasKey(a => a.Id);
 
 
             // Configure the one-to-many relationship between Arrival and ArrivalImage

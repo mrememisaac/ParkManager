@@ -4,13 +4,13 @@ using ParkManager.Domain;
 
 namespace ParkManager.Persistence.Configurations
 {
-    public class ParkImageConfiguration : IEntityTypeConfiguration<ParkImage>
+    public class ParkImageConfiguration : EntityConfiguration<ParkImage>, IEntityTypeConfiguration<ParkImage>
     {
         public void Configure(EntityTypeBuilder<ParkImage> builder)
         {
             builder.ToTable("ParkImages");
 
-            builder.HasKey(ai => ai.Id);
+            //builder.HasKey(ai => ai.Id);
 
             builder.Property(ai => ai.ParkId)
                 .IsRequired();
