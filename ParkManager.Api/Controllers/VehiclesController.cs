@@ -16,16 +16,18 @@ namespace ParkManager.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-
-        public VehiclesController(IMediator mediator, IMapper mapper)
+        private readonly ILogger<VehiclesController> _logger;
+        public VehiclesController(IMediator mediator, IMapper mapper, ILogger<VehiclesController> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet("{id}", Name = "GetVehicle")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetVehicleQueryResponse>> Get(Guid id)
         {
             var query = new GetVehicleQuery(id);
@@ -34,8 +36,9 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet(Name = "ListVehicles")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetVehiclesQueryResponse>> List(int page = 0, int count = 100)
         {
             var query = new GetVehiclesQuery(page, count);
@@ -44,8 +47,9 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPost(Name = "AddVehicle")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddVehicleCommandResponse>> Post(Models.Vehicle vehicle)
         {
             var command = _mapper.Map<AddVehicleCommand>(vehicle);
@@ -54,9 +58,10 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPut(Name ="UpdateVehicle")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Vehicle vehicle)
         {
             var command = _mapper.Map<UpdateVehicleCommand>(vehicle);
@@ -66,10 +71,11 @@ namespace ParkManager.Api.Controllers
 
 
         [HttpDelete("{id}", Name ="DeleteVehicle")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var command = new RemoveVehicleCommand(id);
             await _mediator.Send(command);

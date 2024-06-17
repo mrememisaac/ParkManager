@@ -7,6 +7,7 @@ using ParkManager.Application.Features.Departures.Commands.UpdateDeparture;
 using ParkManager.Application.Features.Departures.Queries.GetDeparture;
 using ParkManager.Application.Features.Departures.Queries.GetDepartures;
 
+
 namespace ParkManager.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -15,16 +16,19 @@ namespace ParkManager.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly ILogger<DeparturesController> _logger;
 
-        public DeparturesController(IMediator mediator, IMapper mapper)
+        public DeparturesController(IMediator mediator, IMapper mapper, ILogger<DeparturesController> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet("{id}", Name = "GetDeparture")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDepartureQueryResponse>> Get(Guid id)
         {
             var query = new GetDepartureQuery(id);
@@ -33,8 +37,9 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet(Name = "ListDepartures")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDeparturesQueryResponse>> List(int page = 0, int count = 100)
         {
             var query = new GetDeparturesQuery(page, count);
@@ -43,32 +48,35 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPost(Name = "AddDeparture")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<AddDepartureCommandResponse>> Post(Models.Departure vehicle)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<AddDepartureCommandResponse>> Post(Models.Departure departure)
         {
-            var command = _mapper.Map<AddDepartureCommand>(vehicle);
+            var command = _mapper.Map<AddDepartureCommand>(departure);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
         }
 
         [HttpPut(Name = "UpdateDeparture")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Put([FromBody] Models.Departure vehicle)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody] Models.Departure departure)
         {
-            var command = _mapper.Map<UpdateDepartureCommand>(vehicle);
+            var command = _mapper.Map<UpdateDepartureCommand>(departure);
             await _mediator.Send(command);
             return NoContent();
         }
 
 
         [HttpDelete("{id}", Name = "DeleteDeparture")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var command = new RemoveDepartureCommand(id);
             await _mediator.Send(command);

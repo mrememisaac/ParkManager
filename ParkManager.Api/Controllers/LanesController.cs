@@ -16,16 +16,19 @@ namespace ParkManager.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly ILogger<LanesController> _logger;
 
-        public LanesController(IMediator mediator, IMapper mapper)
+        public LanesController(IMediator mediator, IMapper mapper, ILogger<LanesController> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet("{id}", Name = "GetLane")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetLaneQueryResponse>> Get(Guid id)
         {
             var query = new GetLaneQuery(id);
@@ -34,8 +37,9 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet(Name = "ListLanes")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetLanesQueryResponse>> List(int page = 0, int count = 100)
         {
             var query = new GetLanesQuery(page, count);
@@ -44,32 +48,35 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPost(Name = "AddLane")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<AddLaneCommandResponse>> Post(Models.Lane vehicle)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<AddLaneCommandResponse>> Post(Models.Lane lane)
         {
-            var command = _mapper.Map<AddLaneCommand>(vehicle);
+            var command = _mapper.Map<AddLaneCommand>(lane);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
         }
 
         [HttpPut(Name = "UpdateLane")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Put([FromBody] Models.Lane vehicle)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody] Models.Lane lane)
         {
-            var command = _mapper.Map<UpdateLaneCommand>(vehicle);
+            var command = _mapper.Map<UpdateLaneCommand>(lane);
             await _mediator.Send(command);
             return NoContent();
         }
 
 
         [HttpDelete("{id}", Name = "DeleteLane")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var command = new RemoveLaneCommand(id);
             await _mediator.Send(command);

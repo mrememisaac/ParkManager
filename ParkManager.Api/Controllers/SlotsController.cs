@@ -16,16 +16,18 @@ namespace ParkManager.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-
-        public SlotsController(IMediator mediator, IMapper mapper)
+        private readonly ILogger<SlotsController> _logger;
+        public SlotsController(IMediator mediator, IMapper mapper, ILogger<SlotsController> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet("{id}", Name = "GetSlot")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetSlotQueryResponse>> Get(Guid id)
         {
             var query = new GetSlotQuery(id);
@@ -34,8 +36,9 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet(Name = "ListSlots")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetSlotsQueryResponse>> List(int page = 0, int count = 100)
         {
             var query = new GetSlotsQuery(page, count);
@@ -44,32 +47,35 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPost(Name = "AddSlot")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<AddSlotCommandResponse>> Post(Models.Slot vehicle)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<AddSlotCommandResponse>> Post(Models.Slot slot)
         {
-            var command = _mapper.Map<AddSlotCommand>(vehicle);
+            var command = _mapper.Map<AddSlotCommand>(slot);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
         }
 
         [HttpPut(Name = "UpdateSlot")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Put([FromBody] Models.Slot vehicle)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody] Models.Slot slot)
         {
-            var command = _mapper.Map<UpdateSlotCommand>(vehicle);
+            var command = _mapper.Map<UpdateSlotCommand>(slot);
             await _mediator.Send(command);
             return NoContent();
         }
 
 
         [HttpDelete("{id}", Name = "DeleteSlot")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var command = new RemoveSlotCommand(id);
             await _mediator.Send(command);

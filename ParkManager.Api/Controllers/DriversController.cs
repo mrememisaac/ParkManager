@@ -16,16 +16,19 @@ namespace ParkManager.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly ILogger<DriversController> _logger;
 
-        public DriversController(IMediator mediator, IMapper mapper)
+        public DriversController(IMediator mediator, IMapper mapper, ILogger<DriversController> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet("{id}", Name = "GetDriver")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDriverQueryResponse>> Get(Guid id)
         {
             var query = new GetDriverQuery(id);
@@ -34,8 +37,9 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpGet(Name = "ListDrivers")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDriversQueryResponse>> List(int page = 0, int count = 100)
         {
             var query = new GetDriversQuery(page, count);
@@ -44,32 +48,35 @@ namespace ParkManager.Api.Controllers
         }
 
         [HttpPost(Name = "AddDriver")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<AddDriverCommandResponse>> Post(Models.Driver vehicle)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<AddDriverCommandResponse>> Post(Models.Driver driver)
         {
-            var command = _mapper.Map<AddDriverCommand>(vehicle);
+            var command = _mapper.Map<AddDriverCommand>(driver);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
         }
 
         [HttpPut(Name = "UpdateDriver")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Put([FromBody] Models.Driver vehicle)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody] Models.Driver driver)
         {
-            var command = _mapper.Map<UpdateDriverCommand>(vehicle);
+            var command = _mapper.Map<UpdateDriverCommand>(driver);
             await _mediator.Send(command);
             return NoContent();
         }
 
 
         [HttpDelete("{id}", Name = "DeleteDriver")]
+        [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
-        public async Task<IActionResult> Delete(Guid id)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var command = new RemoveDriverCommand(id);
             await _mediator.Send(command);
