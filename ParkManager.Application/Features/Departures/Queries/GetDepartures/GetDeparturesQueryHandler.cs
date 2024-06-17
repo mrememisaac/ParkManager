@@ -8,19 +8,19 @@ namespace ParkManager.Application.Features.Departures.Queries.GetDepartures
 {
     public class GetDeparturesQueryHandler : IRequestHandler<GetDeparturesQuery, GetDeparturesQueryResponse>
     {
-        private readonly IDeparturesRepository _vehiclesRepository;
+        private readonly IDeparturesRepository _departuresRepository;
         private readonly IMapper _mapper;
 
-        public GetDeparturesQueryHandler(IDeparturesRepository vehicleRepository, IMapper mapper)
+        public GetDeparturesQueryHandler(IDeparturesRepository departureRepository, IMapper mapper)
         {
-            _vehiclesRepository = vehicleRepository;
+            _departuresRepository = departureRepository;
             _mapper = mapper;
         }
 
         public async Task<GetDeparturesQueryResponse> Handle(GetDeparturesQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetDeparturesQueryResponse>(vehicles);
+            var items = await _departuresRepository.List(request.Count, request.Page);
+            return new GetDeparturesQueryResponse{ Items = _mapper.Map<List<GetDepartureQueryResponse>>(items) };
         }
     }
 }

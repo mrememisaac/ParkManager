@@ -8,19 +8,19 @@ namespace ParkManager.Application.Features.Tags.Queries.GetTags
 {
     public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, GetTagsQueryResponse>
     {
-        private readonly ITagsRepository _vehiclesRepository;
+        private readonly ITagsRepository _tagsRepository;
         private readonly IMapper _mapper;
 
-        public GetTagsQueryHandler(ITagsRepository vehicleRepository, IMapper mapper)
+        public GetTagsQueryHandler(ITagsRepository tagRepository, IMapper mapper)
         {
-            _vehiclesRepository = vehicleRepository;
+            _tagsRepository = tagRepository;
             _mapper = mapper;
         }
 
         public async Task<GetTagsQueryResponse> Handle(GetTagsQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetTagsQueryResponse>(vehicles);
+            var tags = await _tagsRepository.List(request.Count, request.Page);
+            return new GetTagsQueryResponse { Items = _mapper.Map<List<GetTagQueryResponse>>(tags) };
         }
     }
 }

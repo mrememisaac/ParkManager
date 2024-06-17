@@ -8,19 +8,19 @@ namespace ParkManager.Application.Features.Arrivals.Queries.GetArrivals
 {
     public class GetArrivalsQueryHandler : IRequestHandler<GetArrivalsQuery, GetArrivalsQueryResponse>
     {
-        private readonly IArrivalsRepository _vehiclesRepository;
+        private readonly IArrivalsRepository _arrivalsRepository;
         private readonly IMapper _mapper;
 
-        public GetArrivalsQueryHandler(IArrivalsRepository vehicleRepository, IMapper mapper)
+        public GetArrivalsQueryHandler(IArrivalsRepository arrivalRepository, IMapper mapper)
         {
-            _vehiclesRepository = vehicleRepository;
+            _arrivalsRepository = arrivalRepository;
             _mapper = mapper;
         }
 
         public async Task<GetArrivalsQueryResponse> Handle(GetArrivalsQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetArrivalsQueryResponse>(vehicles);
+            var arrivals = await _arrivalsRepository.List(request.Count, request.Page);
+            return new GetArrivalsQueryResponse { Items = _mapper.Map<List<GetArrivalQueryResponse>>(arrivals) };
         }
     }
 }

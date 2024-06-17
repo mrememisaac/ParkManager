@@ -4,6 +4,6 @@ namespace ParkManager.Application.Features.Arrivals.Queries.GetArrivals
 {
     public class GetArrivalsQueryResponse
     {
-        public List<GetArrivalQueryResponse> Results { get; set; } = new List<GetArrivalQueryResponse>();
+        public List<GetArrivalQueryResponse> Items { get; set; } = new List<GetArrivalQueryResponse>();
     }
 }

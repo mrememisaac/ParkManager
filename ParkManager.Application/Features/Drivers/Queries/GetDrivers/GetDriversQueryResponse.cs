@@ -4,6 +4,6 @@ namespace ParkManager.Application.Features.Drivers.Queries.GetDrivers
 {
     public class GetDriversQueryResponse
     {
-        public List<GetDriverQueryResponse> Results { get; set; } = new List<GetDriverQueryResponse>();
+        public List<GetDriverQueryResponse> Items { get; set; } = new List<GetDriverQueryResponse>();
     }
 }

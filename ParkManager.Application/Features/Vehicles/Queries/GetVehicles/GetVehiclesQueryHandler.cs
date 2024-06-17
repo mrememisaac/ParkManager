@@ -20,7 +20,7 @@ namespace ParkManager.Application.Features.Vehicles.Queries.GetVehicles
         public async Task<GetVehiclesQueryResponse> Handle(GetVehiclesQuery request, CancellationToken cancellationToken)
         {
             var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetVehiclesQueryResponse>(vehicles);
+            return new GetVehiclesQueryResponse { Items = _mapper.Map<List<GetVehicleQueryResponse>>(vehicles) };
         }
     }
 }

@@ -8,19 +8,19 @@ namespace ParkManager.Application.Features.Slots.Queries.GetSlots
 {
     public class GetSlotsQueryHandler : IRequestHandler<GetSlotsQuery, GetSlotsQueryResponse>
     {
-        private readonly ISlotsRepository _vehiclesRepository;
+        private readonly ISlotsRepository _slotsRepository;
         private readonly IMapper _mapper;
 
-        public GetSlotsQueryHandler(ISlotsRepository vehicleRepository, IMapper mapper)
+        public GetSlotsQueryHandler(ISlotsRepository slotRepository, IMapper mapper)
         {
-            _vehiclesRepository = vehicleRepository;
+            _slotsRepository = slotRepository;
             _mapper = mapper;
         }
 
         public async Task<GetSlotsQueryResponse> Handle(GetSlotsQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetSlotsQueryResponse>(vehicles);
+            var slots = await _slotsRepository.List(request.Count, request.Page);
+            return new GetSlotsQueryResponse{ Items =_mapper.Map<List<GetSlotQueryResponse>>(slots) };
         }
     }
 }

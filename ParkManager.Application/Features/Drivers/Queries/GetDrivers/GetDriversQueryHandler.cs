@@ -8,19 +8,19 @@ namespace ParkManager.Application.Features.Drivers.Queries.GetDrivers
 {
     public class GetDriversQueryHandler : IRequestHandler<GetDriversQuery, GetDriversQueryResponse>
     {
-        private readonly IDriversRepository _vehiclesRepository;
+        private readonly IDriversRepository _driversRepository;
         private readonly IMapper _mapper;
 
-        public GetDriversQueryHandler(IDriversRepository vehicleRepository, IMapper mapper)
+        public GetDriversQueryHandler(IDriversRepository driverRepository, IMapper mapper)
         {
-            _vehiclesRepository = vehicleRepository;
+            _driversRepository = driverRepository;
             _mapper = mapper;
         }
 
         public async Task<GetDriversQueryResponse> Handle(GetDriversQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetDriversQueryResponse>(vehicles);
+            var drivers = await _driversRepository.List(request.Count, request.Page);
+            return new GetDriversQueryResponse{ Items = _mapper.Map<List<GetDriverQueryResponse>>(drivers)};
         }
     }
 }

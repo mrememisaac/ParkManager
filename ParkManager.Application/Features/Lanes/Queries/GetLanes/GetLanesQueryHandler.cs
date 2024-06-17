@@ -8,19 +8,19 @@ namespace ParkManager.Application.Features.Lanes.Queries.GetLanes
 {
     public class GetLanesQueryHandler : IRequestHandler<GetLanesQuery, GetLanesQueryResponse>
     {
-        private readonly ILanesRepository _vehiclesRepository;
+        private readonly ILanesRepository _lanesRepository;
         private readonly IMapper _mapper;
 
-        public GetLanesQueryHandler(ILanesRepository vehicleRepository, IMapper mapper)
+        public GetLanesQueryHandler(ILanesRepository laneRepository, IMapper mapper)
         {
-            _vehiclesRepository = vehicleRepository;
+            _lanesRepository = laneRepository;
             _mapper = mapper;
         }
 
         public async Task<GetLanesQueryResponse> Handle(GetLanesQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetLanesQueryResponse>(vehicles);
+            var lanes = await _lanesRepository.List(request.Count, request.Page);
+            return new GetLanesQueryResponse { Items = _mapper.Map<List<GetLaneQueryResponse>>(lanes) };
         }
     }
 }

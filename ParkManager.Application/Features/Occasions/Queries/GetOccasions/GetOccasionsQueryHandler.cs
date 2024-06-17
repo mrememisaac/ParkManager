@@ -8,19 +8,19 @@ namespace ParkManager.Application.Features.Occasions.Queries.GetOccasions
 {
     public class GetOccasionsQueryHandler : IRequestHandler<GetOccasionsQuery, GetOccasionsQueryResponse>
     {
-        private readonly IOccasionsRepository _vehiclesRepository;
+        private readonly IOccasionsRepository _occasionsRepository;
         private readonly IMapper _mapper;
 
-        public GetOccasionsQueryHandler(IOccasionsRepository vehicleRepository, IMapper mapper)
+        public GetOccasionsQueryHandler(IOccasionsRepository occasionRepository, IMapper mapper)
         {
-            _vehiclesRepository = vehicleRepository;
+            _occasionsRepository = occasionRepository;
             _mapper = mapper;
         }
 
         public async Task<GetOccasionsQueryResponse> Handle(GetOccasionsQuery request, CancellationToken cancellationToken)
         {
-            var vehicles = await _vehiclesRepository.List(request.Count, request.Page);
-            return _mapper.Map<GetOccasionsQueryResponse>(vehicles);
+            var occasions = await _occasionsRepository.List(request.Count, request.Page);
+            return new GetOccasionsQueryResponse { Items = _mapper.Map<List<GetOccasionQueryResponse>>(occasions) };
         }
     }
 }
