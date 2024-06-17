@@ -4,6 +4,7 @@ using ParkManager.Api.Services;
 using ParkManager.Application;
 using ParkManager.Application.Contracts.Authentication;
 using ParkManager.Persistence;
+using ParkManager.Persistence.DataContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,9 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new GlobalExceptionFilter());
-});
+    options.ReturnHttpNotAcceptable = true;
+}).AddXmlDataContractSerializerFormatters();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -35,7 +38,7 @@ builder.Services.AddSwaggerGen(options =>
 //});
 
 //builder.Services.AddApplicationInsightsTelemetry();
-//builder.Services.AddHealthChecks().AddDbContextCheck<BoxCarAdminDbContext>();
+//builder.Services.AddHealthChecks().AddDbContextCheck<ParkManagerDbContext>();
 
 var app = builder.Build();
 
