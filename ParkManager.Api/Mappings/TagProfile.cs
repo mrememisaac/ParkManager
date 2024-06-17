@@ -10,11 +10,11 @@ namespace ParkManager.Api.Mappings
     {
         public TagProfile()
         {
-            CreateMap<AddTagCommand, Tag>();
-            CreateMap<UpdateTagCommand, Tag>();
+            CreateMap<AddTagCommand, Tag>().ReverseMap();
+            CreateMap<UpdateTagCommand, Tag>().ReverseMap();
             CreateMap<UpdateTagCommandResponse, Tag>().ReverseMap();
             CreateMap<AddTagCommandResponse, Tag>().ReverseMap();
-            CreateMap<Tag, GetTagQueryResponse>();
+            CreateMap<Tag, GetTagQueryResponse>().ReverseMap();
         }
     }
 }

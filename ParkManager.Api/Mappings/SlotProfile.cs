@@ -10,11 +10,11 @@ namespace ParkManager.Api.Mappings
     {
         public SlotProfile()
         {
-            CreateMap<AddSlotCommand, Slot>();
-            CreateMap<UpdateSlotCommand, Slot>();
+            CreateMap<AddSlotCommand, Slot>().ReverseMap();
+            CreateMap<UpdateSlotCommand, Slot>().ReverseMap();
             CreateMap<UpdateSlotCommandResponse, Slot>().ReverseMap();
             CreateMap<AddSlotCommandResponse, Slot>().ReverseMap();
-            CreateMap<Slot, GetSlotQueryResponse>();
+            CreateMap<Slot, GetSlotQueryResponse>().ReverseMap();
         }
     }
 }
