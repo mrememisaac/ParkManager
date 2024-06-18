@@ -19,6 +19,8 @@ namespace ParkManager.Persistence.DataContexts
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Slot> Slots { get; set; }
+        public DbSet<Lane> Lanes { get; set; }
         public DbSet<Occasion> Occasions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
