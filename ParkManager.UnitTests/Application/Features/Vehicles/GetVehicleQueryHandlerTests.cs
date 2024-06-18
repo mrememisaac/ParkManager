@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Vehicles.Queries.GetVehicle;
@@ -14,14 +15,16 @@ namespace ParkManager.UnitTests
     public class GetVehicleQueryHandlerTests
     {
         private readonly Mock<IVehiclesRepository> _mockVehiclesRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetVehicleQueryHandler>> _mockLogger;
         private readonly IRequestHandler<GetVehicleQuery, GetVehicleQueryResponse> _handler;
 
         public GetVehicleQueryHandlerTests()
         {
             _mockVehiclesRepository = new Mock<IVehiclesRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetVehicleQueryHandler(_mockVehiclesRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetVehicleQueryHandler>>();
+            _handler = new GetVehicleQueryHandler(_mockVehiclesRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

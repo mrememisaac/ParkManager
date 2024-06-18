@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Lanes.Commands.AddLane;
@@ -15,21 +16,25 @@ namespace ParkManager.UnitTests
     public class AddLaneCommandHandlerTests
     {
         private readonly Mock<ILanesRepository> _mockLanesRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<AddLaneCommandHandler>> _mockLogger;
         private readonly AddLaneCommandValidator _validator;
         private readonly AddLaneCommand _command;
+        private readonly AddLaneCommandHandler _handler;
 
         public AddLaneCommandHandlerTests()
         {
             _mockLanesRepository = new Mock<ILanesRepository>();
             _mockMapper = new Mock<IMapper>();
             _validator = new AddLaneCommandValidator();
+            _mockLogger = new Mock<ILogger<AddLaneCommandHandler>>();
             _command = new AddLaneCommand
             {
                 Id = Guid.NewGuid(), 
                 Name = "Lane 1", 
                 ParkId = Guid.NewGuid()
             };
+            _handler = new AddLaneCommandHandler(_mockLanesRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]
@@ -38,7 +43,6 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = _command;
             var lane = new Lane(command.Id, command.ParkId, command.Name);
-            var handler = new AddLaneCommandHandler(_mockLanesRepository.Object, _validator, _mockMapper.Object);
             var expectedResponse = new AddLaneCommandResponse()
             {
                 Id = lane.Id,
@@ -49,7 +53,7 @@ namespace ParkManager.UnitTests
             _mockMapper.Setup(m => m.Map<AddLaneCommandResponse>(It.IsAny<Lane>())).Returns(expectedResponse);
 
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.Equal(expectedResponse, result);
@@ -60,10 +64,9 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var command = new AddLaneCommand();
-            var handler = new AddLaneCommandHandler(_mockLanesRepository.Object, _validator, _mockMapper.Object);
 
             // Act & Assert
-            await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]
@@ -71,12 +74,11 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var command = _command;
-            var handler = new AddLaneCommandHandler(_mockLanesRepository.Object, _validator, _mockMapper.Object);
             var mappedLane = new Lane(command.Id, command.ParkId, command.Name);
             _mockMapper.Setup(m => m.Map<Lane>(It.IsAny<AddLaneCommand>())).Returns(mappedLane);
 
             // Act
-            await handler.Handle(command, CancellationToken.None);
+            await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             _mockLanesRepository.Verify(r => r.Add(mappedLane), Times.Once);

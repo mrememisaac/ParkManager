@@ -1,5 +1,7 @@
 using AutoMapper;
+using Castle.Core.Logging;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Arrivals.Queries.GetArrival;
@@ -12,12 +14,14 @@ namespace ParkManager.UnitTests
         private readonly Mock<IArrivalsRepository> _mockArrivalsRepository;
         private readonly IRequestHandler<GetArrivalQuery, GetArrivalQueryResponse> _handler;
         private readonly Mock<IMapper> _mapper;
+        private readonly Mock<ILogger<GetArrivalQueryHandler>> _mockLogger;
 
         public GetArrivalQueryHandlerTests()
         {
             _mapper = new Mock<IMapper>();
             _mockArrivalsRepository = new Mock<IArrivalsRepository>();
-            _handler = new GetArrivalQueryHandler(_mockArrivalsRepository.Object, _mapper.Object);
+            _mockLogger = new Mock<ILogger<GetArrivalQueryHandler>>();
+            _handler = new GetArrivalQueryHandler(_mockArrivalsRepository.Object, _mapper.Object, _mockLogger.Object);
         }
 
         [Fact]

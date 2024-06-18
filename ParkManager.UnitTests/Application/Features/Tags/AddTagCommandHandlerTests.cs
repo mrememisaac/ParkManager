@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Tags.Commands.AddTag;
@@ -14,9 +15,11 @@ namespace ParkManager.UnitTests
     public class AddTagCommandHandlerTests
     {
         private readonly Mock<ITagsRepository> _mockTagsRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<AddTagCommandHandler>> _mockLogger;
         private readonly AddTagCommandValidator _validator;
         private readonly AddTagCommand _command;
+        private readonly AddTagCommandHandler _handler;
 
         public AddTagCommandHandlerTests()
         {
@@ -24,6 +27,8 @@ namespace ParkManager.UnitTests
             _mockMapper = new Mock<IMapper>();
             _validator = new AddTagCommandValidator();
             _command = CreateAddTagCommand();
+            _mockLogger = new Mock<ILogger<AddTagCommandHandler>>();
+            _handler = new AddTagCommandHandler(_mockTagsRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
         }
 
         private AddTagCommand CreateAddTagCommand(bool validInstance = true)
@@ -45,14 +50,13 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = _command;
             var tag = new Tag(command.Id, command.Number);
-            var handler = new AddTagCommandHandler(_mockTagsRepository.Object, _validator, _mockMapper.Object);
             var expectedResponse = new AddTagCommandResponse { Id = tag.Id, Number = tag.Number };
             _mockMapper.Setup(m => m.Map<Tag>(It.IsAny<AddTagCommand>())).Returns(tag);
             _mockMapper.Setup(m => m.Map<AddTagCommandResponse>(It.IsAny<Tag>())).Returns(expectedResponse);
             _mockTagsRepository.Setup(repo => repo.Add(It.IsAny<Tag>())).ReturnsAsync(tag);
 
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
@@ -64,10 +68,9 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var command = new AddTagCommand(); // Invalid because Name is not set
-            var handler = new AddTagCommandHandler(_mockTagsRepository.Object, _validator, _mockMapper.Object);
 
             // Act & Assert
-            await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]
@@ -77,10 +80,9 @@ namespace ParkManager.UnitTests
             var command = _command;
             var mappedTag = new Tag(command.Id, command.Number);
             _mockMapper.Setup(m => m.Map<Tag>(It.IsAny<AddTagCommand>())).Returns(mappedTag);
-            var handler = new AddTagCommandHandler(_mockTagsRepository.Object, _validator, _mockMapper.Object);
 
             // Act
-            await handler.Handle(command, CancellationToken.None);
+            await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             _mockTagsRepository.Verify(r => r.Add(mappedTag), Times.Once);

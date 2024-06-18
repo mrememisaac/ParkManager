@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Occasions.Queries.GetOccasion;
@@ -16,13 +17,15 @@ namespace ParkManager.UnitTests
     {
         private readonly Mock<IOccasionsRepository> _mockOccasionsRepository;
         private readonly IRequestHandler<GetOccasionQuery, GetOccasionQueryResponse> _handler;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetOccasionQueryHandler>> _mockLogger;
 
         public GetOccasionQueryHandlerTests()
         {
             _mockOccasionsRepository = new Mock<IOccasionsRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetOccasionQueryHandler(_mockOccasionsRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetOccasionQueryHandler>>();
+            _handler = new GetOccasionQueryHandler(_mockOccasionsRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Lanes.Commands.RemoveLane;
@@ -13,14 +14,16 @@ namespace ParkManager.UnitTests
     public class RemoveLaneCommandHandlerTests
     {
         private readonly Mock<ILanesRepository> _mockLanesRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<RemoveLaneCommandHandler>> _mockLogger;
         private readonly IRequestHandler<RemoveLaneCommand> _handler;
 
         public RemoveLaneCommandHandlerTests()
         {
             _mockLanesRepository = new Mock<ILanesRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new RemoveLaneCommandHandler(_mockLanesRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<RemoveLaneCommandHandler>>();
+            _handler = new RemoveLaneCommandHandler(_mockLanesRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

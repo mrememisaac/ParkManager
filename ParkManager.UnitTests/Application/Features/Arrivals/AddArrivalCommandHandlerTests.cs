@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Arrivals.Commands.AddArrival;
@@ -14,9 +15,11 @@ namespace ParkManager.UnitTests
     public class AddArrivalCommandHandlerTests
     {
         private readonly Mock<IArrivalsRepository> _mockArrivalsRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<AddArrivalCommandHandler>> _mockLogger;
         private readonly AddArrivalCommandValidator _validator;
         private readonly AddArrivalCommand _command;
+        private readonly AddArrivalCommandHandler _handler;
 
         public AddArrivalCommandHandlerTests()
         {
@@ -24,6 +27,8 @@ namespace ParkManager.UnitTests
             _mockMapper = new Mock<IMapper>();
             _validator = new AddArrivalCommandValidator();
             _command = CreateAddArrivalCommand();
+            _mockLogger = new Mock<ILogger<AddArrivalCommandHandler>>();
+            _handler = new AddArrivalCommandHandler(_mockArrivalsRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
         }
 
         private AddArrivalCommand CreateAddArrivalCommand(bool validInstance = true)
@@ -51,8 +56,6 @@ namespace ParkManager.UnitTests
 
             var arrival = new Arrival(command.Id,command.Timestamp, command.ParkId, command.VehicleId, command.DriverId, command.TagId);
 
-            var handler = new AddArrivalCommandHandler(_mockArrivalsRepository.Object, _validator, _mockMapper.Object);
-            
             var expectedResponse = new AddArrivalCommandResponse();
             expectedResponse.DriverId = arrival.DriverId;
             expectedResponse.VehicleId = arrival.VehicleId;
@@ -62,7 +65,7 @@ namespace ParkManager.UnitTests
             _mockMapper.Setup(m => m.Map<AddArrivalCommandResponse>(It.IsAny<Arrival>())).Returns(expectedResponse);
 
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.Equal(expectedResponse, result);
@@ -74,10 +77,8 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = new AddArrivalCommand(); 
 
-            var handler = new AddArrivalCommandHandler(_mockArrivalsRepository.Object, _validator, _mockMapper.Object);
-
             // Act & Assert
-            await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]
@@ -86,13 +87,12 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = _command;
 
-            var handler = new AddArrivalCommandHandler(_mockArrivalsRepository.Object, _validator, _mockMapper.Object);
             var mappedArrival = new Arrival(command.Id, command.Timestamp, command.ParkId, command.VehicleId, command.DriverId, command.TagId);
 
             _mockMapper.Setup(m => m.Map<Arrival>(It.IsAny<AddArrivalCommand>())).Returns(mappedArrival);
 
             // Act
-            await handler.Handle(command, CancellationToken.None);
+            await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             _mockArrivalsRepository.Verify(r => r.Add(mappedArrival), Times.Once);

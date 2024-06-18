@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Parks.Commands.RemovePark;
@@ -14,14 +15,16 @@ namespace ParkManager.UnitTests
     public class RemoveParkCommandHandlerTests
     {
         private readonly Mock<IParksRepository> _mockParksRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<RemoveParkCommandHandler>> _mockLogger;
         private readonly IRequestHandler<RemoveParkCommand> _handler;
 
         public RemoveParkCommandHandlerTests()
         {
             _mockParksRepository = new Mock<IParksRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new RemoveParkCommandHandler(_mockParksRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<RemoveParkCommandHandler>>();
+            _handler = new RemoveParkCommandHandler(_mockParksRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

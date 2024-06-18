@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Parks.Commands.AddPark;
@@ -15,7 +16,8 @@ namespace ParkManager.UnitTests
     public class AddParkCommandHandlerTests
     {
         private readonly Mock<IParksRepository> _mockParksRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<AddParkCommandHandler>> _mockLogger;
         private readonly AddParkCommandValidator _validator;
         private readonly IRequestHandler<AddParkCommand, AddParkCommandResponse> _handler;
         private readonly AddParkCommand _command;
@@ -25,7 +27,8 @@ namespace ParkManager.UnitTests
             _mockParksRepository = new Mock<IParksRepository>();
             _mockMapper = new Mock<IMapper>();
             _validator = new AddParkCommandValidator();
-            _handler = new AddParkCommandHandler(_mockParksRepository.Object, _validator, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<AddParkCommandHandler>>();
+            _handler = new AddParkCommandHandler(_mockParksRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
             _command = new AddParkCommand
             {
                 Id = Guid.NewGuid(),

@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Vehicles.Commands.UpdateVehicle;
@@ -15,7 +16,8 @@ namespace ParkManager.UnitTests
     public class UpdateVehicleCommandHandlerTests
     {
         private readonly Mock<IVehiclesRepository> _mockVehiclesRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<UpdateVehicleCommandHandler>> _mockLogger;
         private readonly UpdateVehicleCommandValidator _validator;
         private readonly UpdateVehicleCommand _command;
 
@@ -25,6 +27,7 @@ namespace ParkManager.UnitTests
             _mockMapper = new Mock<IMapper>();
             _validator = new UpdateVehicleCommandValidator();
             _command = CreateUpdateVehicleCommand();
+            _mockLogger = new Mock<ILogger<UpdateVehicleCommandHandler>>();
         }
 
         private UpdateVehicleCommand CreateUpdateVehicleCommand(bool validInstance = true)
@@ -48,7 +51,7 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = _command;
             var vehicle = new Vehicle(command.Id, command.Make, command.Model, command.Registration);
-            var handler = new UpdateVehicleCommandHandler(_mockVehiclesRepository.Object, _validator, _mockMapper.Object);
+            UpdateVehicleCommandHandler handler = CreateHandler();
             var expectedResponse = new UpdateVehicleCommandResponse
             {
                 Id = vehicle.Id,
@@ -71,12 +74,17 @@ namespace ParkManager.UnitTests
             Assert.Equal(expectedResponse.Registration, result.Registration);
         }
 
+        private UpdateVehicleCommandHandler CreateHandler()
+        {
+            return new UpdateVehicleCommandHandler(_mockVehiclesRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
+        }
+
         [Fact]
         public async Task Handle_ShouldThrowValidationException_WhenCommandIsInvalid()
         {
             // Arrange
             var command = new UpdateVehicleCommand(); // Invalid because required properties are not set
-            var handler = new UpdateVehicleCommandHandler(_mockVehiclesRepository.Object, _validator, _mockMapper.Object);
+            var handler = CreateHandler();
 
             // Act & Assert
             await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
@@ -89,7 +97,7 @@ namespace ParkManager.UnitTests
             var command = _command;
             var mappedVehicle = new Vehicle(command.Id, command.Make, command.Model, command.Registration);
             _mockMapper.Setup(m => m.Map<Vehicle>(It.IsAny<UpdateVehicleCommand>())).Returns(mappedVehicle);
-            var handler = new UpdateVehicleCommandHandler(_mockVehiclesRepository.Object, _validator, _mockMapper.Object);
+            var handler = CreateHandler();
 
             // Act
             await handler.Handle(command, CancellationToken.None);

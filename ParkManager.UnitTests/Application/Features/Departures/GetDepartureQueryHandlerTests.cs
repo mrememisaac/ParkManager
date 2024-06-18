@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Departures.Queries.GetDeparture;
@@ -10,14 +11,16 @@ namespace ParkManager.UnitTests
     public class GetDepartureQueryHandlerTests
     {
         private readonly Mock<IDeparturesRepository> _mockDeparturesRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetDepartureQueryHandler>> _mockLogger;
         private readonly IRequestHandler<GetDepartureQuery, GetDepartureQueryResponse> _handler;
 
         public GetDepartureQueryHandlerTests()
         {
             _mockDeparturesRepository = new Mock<IDeparturesRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetDepartureQueryHandler(_mockDeparturesRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetDepartureQueryHandler>>();
+            _handler = new GetDepartureQueryHandler(_mockDeparturesRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

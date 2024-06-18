@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Tags.Queries.GetTag;
@@ -14,14 +15,16 @@ namespace ParkManager.UnitTests
     public class GetTagQueryHandlerTests
     {
         private readonly Mock<ITagsRepository> _mockTagsRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetTagQueryHandler>> _mockLogger;
         private readonly IRequestHandler<GetTagQuery, GetTagQueryResponse> _handler;
 
         public GetTagQueryHandlerTests()
         {
             _mockTagsRepository = new Mock<ITagsRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetTagQueryHandler(_mockTagsRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetTagQueryHandler>>();
+            _handler = new GetTagQueryHandler(_mockTagsRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

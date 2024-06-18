@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Drivers.Commands.RemoveDriver;
@@ -13,14 +14,16 @@ namespace ParkManager.UnitTests
     public class RemoveDriverCommandHandlerTests
     {
         private readonly Mock<IDriversRepository> _mockDriversRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<RemoveDriverCommandHandler>> _mockLogger;
         private readonly IRequestHandler<RemoveDriverCommand> _handler;
 
         public RemoveDriverCommandHandlerTests()
         {
             _mockDriversRepository = new Mock<IDriversRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new RemoveDriverCommandHandler(_mockDriversRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<RemoveDriverCommandHandler>>();
+            _handler = new RemoveDriverCommandHandler(_mockDriversRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Parks.Commands.UpdatePark;
@@ -13,13 +14,15 @@ namespace ParkManager.UnitTests
     {
         private readonly Mock<IParksRepository> _mockParksRepository;
         private readonly IRequestHandler<GetParkQuery, GetParkQueryResponse> _handler;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetParkQueryHandler>> _mockLogger;
 
         public GetParkQueryHandlerTests()
         {
             _mockParksRepository = new Mock<IParksRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetParkQueryHandler(_mockParksRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetParkQueryHandler>>();
+            _handler = new GetParkQueryHandler(_mockParksRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

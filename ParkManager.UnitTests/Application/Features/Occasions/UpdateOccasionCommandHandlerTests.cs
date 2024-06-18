@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Occasions.Commands.UpdateOccasion;
@@ -10,7 +11,8 @@ namespace ParkManager.UnitTests
     public class UpdateOccasionCommandHandlerTests
     {
         private readonly Mock<IOccasionsRepository> _mockOccasionsRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<UpdateOccasionCommandHandler>> _mockLogger;
         private readonly UpdateOccasionCommandValidator _validator;
         private readonly UpdateOccasionCommandHandler _handler;
         private readonly UpdateOccasionCommand _command;
@@ -20,7 +22,8 @@ namespace ParkManager.UnitTests
             _mockOccasionsRepository = new Mock<IOccasionsRepository>();
             _mockMapper = new Mock<IMapper>();
             _validator = new UpdateOccasionCommandValidator();
-            _handler = new UpdateOccasionCommandHandler(_mockOccasionsRepository.Object, _validator, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<UpdateOccasionCommandHandler>>();
+            _handler = new UpdateOccasionCommandHandler(_mockOccasionsRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
             _command = new UpdateOccasionCommand
             {
                 Id = Guid.NewGuid(), EndDate = DateTime.Now.AddDays(1), StartDate = DateTime.Now, Name = "Test Occasion"

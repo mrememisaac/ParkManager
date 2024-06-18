@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Slots.Commands.AddSlot;
@@ -14,9 +15,11 @@ namespace ParkManager.UnitTests
     public class AddSlotCommandHandlerTests
     {
         private readonly Mock<ISlotsRepository> _mockSlotsRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<AddSlotCommandHandler>> _mockLogger;
         private readonly AddSlotCommandValidator _validator;
         private readonly AddSlotCommand _command;
+        private readonly AddSlotCommandHandler _handler;
 
         public AddSlotCommandHandlerTests()
         {
@@ -24,6 +27,8 @@ namespace ParkManager.UnitTests
             _mockMapper = new Mock<IMapper>();
             _validator = new AddSlotCommandValidator();
             _command = CreateAddSlotCommand();
+            _mockLogger = new Mock<ILogger<AddSlotCommandHandler>>();
+            _handler = new AddSlotCommandHandler(_mockSlotsRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
         }
 
         private AddSlotCommand CreateAddSlotCommand(bool validInstance = true)
@@ -48,7 +53,6 @@ namespace ParkManager.UnitTests
 
             var slot = new Slot(command.Id, command.LaneId, command.Name); // Populate with valid properties
 
-            var handler = new AddSlotCommandHandler(_mockSlotsRepository.Object, _validator, _mockMapper.Object);
 
             var expectedResponse = new AddSlotCommandResponse
             {
@@ -60,7 +64,7 @@ namespace ParkManager.UnitTests
             _mockMapper.Setup(m => m.Map<AddSlotCommandResponse>(It.IsAny<Slot>())).Returns(expectedResponse);
 
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.Equal(expectedResponse, result);
@@ -72,10 +76,9 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = new AddSlotCommand(); // Populate with invalid properties
 
-            var handler = new AddSlotCommandHandler(_mockSlotsRepository.Object, _validator, _mockMapper.Object);
 
             // Act & Assert
-            await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]
@@ -84,13 +87,12 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = _command;
 
-            var handler = new AddSlotCommandHandler(_mockSlotsRepository.Object, _validator, _mockMapper.Object);
             var mappedSlot = new Slot(command.Id, command.LaneId, command.Name); // Adjust mapping as necessary
 
             _mockMapper.Setup(m => m.Map<Slot>(It.IsAny<AddSlotCommand>())).Returns(mappedSlot);
 
             // Act
-            await handler.Handle(command, CancellationToken.None);
+            await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             _mockSlotsRepository.Verify(r => r.Add(mappedSlot), Times.Once);

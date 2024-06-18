@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Slots.Queries.GetSlot;
@@ -15,13 +16,15 @@ namespace ParkManager.UnitTests
     {
         private readonly Mock<ISlotsRepository> _mockSlotsRepository;
         private readonly IRequestHandler<GetSlotQuery, GetSlotQueryResponse> _handler;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetSlotQueryHandler>> _mockLogger;
 
         public GetSlotQueryHandlerTests()
         {
             _mockSlotsRepository = new Mock<ISlotsRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetSlotQueryHandler(_mockSlotsRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetSlotQueryHandler>>();
+            _handler = new GetSlotQueryHandler(_mockSlotsRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Lanes.Queries.GetLane;
@@ -11,13 +12,15 @@ namespace ParkManager.UnitTests
     {
         private readonly Mock<ILanesRepository> _mockLanesRepository;
         private readonly IRequestHandler<GetLaneQuery, GetLaneQueryResponse> _handler;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetLaneQueryHandler>> _mockLogger;
 
         public GetLaneQueryHandlerTests()
         {
             _mockLanesRepository = new Mock<ILanesRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetLaneQueryHandler(_mockLanesRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetLaneQueryHandler>>();
+            _handler = new GetLaneQueryHandler(_mockLanesRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

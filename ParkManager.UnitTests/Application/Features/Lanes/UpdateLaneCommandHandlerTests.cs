@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Lanes.Commands.UpdateLane;
@@ -10,7 +11,8 @@ namespace ParkManager.UnitTests
     public class UpdateLaneCommandHandlerTests
     {
         private readonly Mock<ILanesRepository> _mockLanesRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<UpdateLaneCommandHandler>> _mockLogger;
         private readonly UpdateLaneCommandValidator _validator;
         private readonly UpdateLaneCommandHandler _handler;
         private readonly UpdateLaneCommand _command;
@@ -20,7 +22,8 @@ namespace ParkManager.UnitTests
             _mockLanesRepository = new Mock<ILanesRepository>();
             _mockMapper = new Mock<IMapper>();
             _validator = new UpdateLaneCommandValidator();
-            _handler = new UpdateLaneCommandHandler(_mockLanesRepository.Object, _validator, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<UpdateLaneCommandHandler>>();
+            _handler = new UpdateLaneCommandHandler(_mockLanesRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
             _command = new UpdateLaneCommand
             {
                 Id = Guid.NewGuid(),

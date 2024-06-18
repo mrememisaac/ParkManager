@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Occasions.Commands.RemoveOccasion;
@@ -9,14 +10,16 @@ namespace ParkManager.UnitTests
     public class RemoveOccasionCommandHandlerTests
     {
         private readonly Mock<IOccasionsRepository> _mockOccasionsRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<RemoveOccasionCommandHandler>> _mockLogger;
         private readonly IRequestHandler<RemoveOccasionCommand> _handler;
 
         public RemoveOccasionCommandHandlerTests()
         {
             _mockOccasionsRepository = new Mock<IOccasionsRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new RemoveOccasionCommandHandler(_mockOccasionsRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<RemoveOccasionCommandHandler>>();
+            _handler = new RemoveOccasionCommandHandler(_mockOccasionsRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

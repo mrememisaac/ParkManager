@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Tags.Commands.RemoveTag;
@@ -13,14 +14,16 @@ namespace ParkManager.UnitTests
     public class RemoveTagCommandHandlerTests
     {
         private readonly Mock<ITagsRepository> _mockTagsRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<RemoveTagCommandHandler>> _mockLogger;
         private readonly IRequestHandler<RemoveTagCommand> _handler;
 
         public RemoveTagCommandHandlerTests()
         {
             _mockTagsRepository = new Mock<ITagsRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new RemoveTagCommandHandler(_mockTagsRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<RemoveTagCommandHandler>>();
+            _handler = new RemoveTagCommandHandler(_mockTagsRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

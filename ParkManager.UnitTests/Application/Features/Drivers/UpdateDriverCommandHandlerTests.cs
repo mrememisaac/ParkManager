@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Drivers.Commands.UpdateDriver;
@@ -10,21 +11,26 @@ namespace ParkManager.UnitTests
     public class UpdateDriverCommandHandlerTests
     {
         private readonly Mock<IDriversRepository> _mockDriversRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<UpdateDriverCommandHandler>> _mockLogger;
         private readonly UpdateDriverCommandValidator _validator;
         private readonly UpdateDriverCommand _command;
+        private readonly UpdateDriverCommandHandler _handler;
 
         public UpdateDriverCommandHandlerTests()
         {
             _mockDriversRepository = new Mock<IDriversRepository>();
             _mockMapper = new Mock<IMapper>();
             _validator = new UpdateDriverCommandValidator();
+            _mockLogger = new Mock<ILogger<UpdateDriverCommandHandler>>();
+            _handler = new UpdateDriverCommandHandler(_mockDriversRepository.Object, _validator, _mockMapper.Object, _mockLogger.Object);
             _command = new UpdateDriverCommand
             {
                 Id = Guid.NewGuid(),
                 Name = "Valid Name",
                 PhoneNumber = "08012345678"
             };
+
         }
 
         [Fact]
@@ -33,7 +39,6 @@ namespace ParkManager.UnitTests
             // Arrange
             var command = _command;
             var driver = new Driver(command.Id, command.Name, command.PhoneNumber);
-            var handler = new UpdateDriverCommandHandler(_mockDriversRepository.Object, _validator, _mockMapper.Object);
             var expectedResponse = new UpdateDriverCommandResponse()
             {
                 Id = driver.Id,
@@ -44,7 +49,7 @@ namespace ParkManager.UnitTests
             _mockMapper.Setup(m => m.Map<UpdateDriverCommandResponse>(It.IsAny<Driver>())).Returns(expectedResponse);
 
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.Equal(expectedResponse, result);
@@ -55,10 +60,9 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var command = new UpdateDriverCommand(); // Populate with invalid properties
-            var handler = new UpdateDriverCommandHandler(_mockDriversRepository.Object, _validator, _mockMapper.Object);
 
             // Act & Assert
-            await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
         }
 
         [Fact]
@@ -66,12 +70,11 @@ namespace ParkManager.UnitTests
         {
             // Arrange
             var command = _command;
-            var handler = new UpdateDriverCommandHandler(_mockDriversRepository.Object, _validator, _mockMapper.Object);
             var mappedDriver = new Driver(command.Id, command.Name, command.PhoneNumber); 
             _mockMapper.Setup(m => m.Map<Driver>(It.IsAny<UpdateDriverCommand>())).Returns(mappedDriver);
 
             // Act
-            await handler.Handle(command, CancellationToken.None);
+            await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             _mockDriversRepository.Verify(r => r.Update(mappedDriver), Times.Once);

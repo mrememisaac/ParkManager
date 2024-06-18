@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Application.Contracts.Persistence;
 using ParkManager.Application.Features.Drivers.Queries.GetDriver;
@@ -14,14 +15,16 @@ namespace ParkManager.UnitTests
     public class GetDriverQueryHandlerTests
     {
         private readonly Mock<IDriversRepository> _mockDriversRepository;
-        private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IMapper> _mockMapper; 
+        private readonly Mock<ILogger<GetDriverQueryHandler>> _mockLogger;
         private readonly IRequestHandler<GetDriverQuery, GetDriverQueryResponse> _handler;
 
         public GetDriverQueryHandlerTests()
         {
             _mockDriversRepository = new Mock<IDriversRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetDriverQueryHandler(_mockDriversRepository.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<GetDriverQueryHandler>>();
+            _handler = new GetDriverQueryHandler(_mockDriversRepository.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]
