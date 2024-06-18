@@ -1,3 +1,4 @@
+using Marvin.Cache.Headers.Utils;
 using ParkManager.Api;
 using ParkManager.Api.Filters;
 using ParkManager.Api.Middlewares;
@@ -42,6 +43,19 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDistributedMemoryCache();
 //builder.Services.AddApplicationInsightsTelemetry();
 //builder.Services.AddHealthChecks().AddDbContextCheck<ParkManagerDbContext>();
+builder.Services.AddHttpCacheHeaders(expirationModelOptions =>
+{
+    expirationModelOptions.MaxAge = 600;
+},
+    validationModelOptions =>
+    {
+        validationModelOptions.MustRevalidate = true;
+    },
+    middlewareOptions =>
+    {
+        middlewareOptions.IgnoredStatusCodes.Concat(HttpStatusCodes.AllErrors);
+    });
+
 
 var app = builder.Build();
 
@@ -57,7 +71,7 @@ else
 }
 
 app.UseHttpsRedirection();
-
+app.UseHttpCacheHeaders();
 app.UseAuthorization();
 
 app.MapControllers();

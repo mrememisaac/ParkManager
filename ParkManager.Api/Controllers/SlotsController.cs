@@ -1,4 +1,5 @@
 using AutoMapper;
+using Marvin.Cache.Headers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkManager.Application.Features.Slots.Commands.AddSlot;
@@ -28,6 +29,8 @@ namespace ParkManager.Api.Controllers
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 99999)]
+        [HttpCacheValidation(MustRevalidate = true)]
         public async Task<ActionResult<GetSlotQueryResponse>> Get(Guid id)
         {
             var query = new GetSlotQuery(id);
@@ -39,6 +42,8 @@ namespace ParkManager.Api.Controllers
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 99999)]
+        [HttpCacheValidation(MustRevalidate = true)]
         public async Task<ActionResult<GetSlotsQueryResponse>> List(int page = 0, int count = 100)
         {
             _logger.BeginScope("ListSlots");

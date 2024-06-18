@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Marvin.Cache.Headers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkManager.Application.Features.Drivers.Commands.AddDriver;
@@ -29,6 +30,8 @@ namespace ParkManager.Api.Controllers
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 99999)]
+        [HttpCacheValidation(MustRevalidate = true)]
         public async Task<ActionResult<GetDriverQueryResponse>> Get(Guid id)
         {
             _logger.BeginScope("GetDriver");
@@ -41,6 +44,8 @@ namespace ParkManager.Api.Controllers
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 99999)]
+        [HttpCacheValidation(MustRevalidate = true)]
         public async Task<ActionResult<GetDriversQueryResponse>> List(int page = 0, int count = 100)
         {
             _logger.BeginScope("ListDrivers");
