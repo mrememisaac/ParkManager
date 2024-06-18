@@ -1,3 +1,4 @@
+using ParkManager.Api;
 using ParkManager.Api.Filters;
 using ParkManager.Api.Middlewares;
 using ParkManager.Api.Services;
@@ -5,9 +6,10 @@ using ParkManager.Application;
 using ParkManager.Application.Contracts.Authentication;
 using ParkManager.Persistence;
 using ParkManager.Persistence.DataContexts;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseSerilog(LoggingConfiguration.ConfigureLogger);
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ILoggedInUserService, LoggedInUserService>();
@@ -24,7 +26,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //var optionsBuilder = new DbContextOptionsBuilder<ParkManagerDbContext>();
-//optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+//optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+//o => o.CommandTimeout(180).ExecutionStrategy(c => new SqlServerRetryingExecutionStrategy(c)));
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -58,7 +61,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseSerilogRequestLogging();
 app.Run();
 
 public partial class Program { }
