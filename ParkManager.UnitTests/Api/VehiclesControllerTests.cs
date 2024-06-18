@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Api.Controllers;
 using ParkManager.Application.Features.Vehicles.Commands.AddVehicle;
@@ -23,12 +24,14 @@ namespace ParkManager.UnitTests
         private readonly Mock<IMediator> _mockMediator;
         private readonly Mock<IMapper> _mockMapper;
         private readonly VehiclesController _controller;
+        private readonly Mock<ILogger<VehiclesController>> _mockLogger;
 
         public VehiclesControllerTests()
         {
             _mockMediator = new Mock<IMediator>();
             _mockMapper = new Mock<IMapper>();
-            _controller = new VehiclesController(_mockMediator.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<VehiclesController>>();
+            _controller = new VehiclesController(_mockMediator.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]

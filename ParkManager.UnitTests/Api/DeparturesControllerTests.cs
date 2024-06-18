@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ParkManager.Api.Controllers;
 using ParkManager.Api.Models;
@@ -20,12 +21,14 @@ namespace ParkManager.UnitTests
         private readonly Mock<IMapper> _mockMapper;
         private readonly DeparturesController _controller;
         private readonly GetDepartureQueryResponse _departureResponse;
+        private readonly Mock<ILogger<DeparturesController>> _mockLogger;
 
         public DeparturesControllerTests()
         {
             _mockMediator = new Mock<IMediator>();
             _mockMapper = new Mock<IMapper>();
-            _controller = new DeparturesController(_mockMediator.Object, _mockMapper.Object);
+            _mockLogger = new Mock<ILogger<DeparturesController>>();
+            _controller = new DeparturesController(_mockMediator.Object, _mockMapper.Object, _mockLogger.Object);
         }
 
         [Fact]
