@@ -39,7 +39,7 @@ builder.Services.AddSwaggerGen(options =>
 //    option.Configuration = builder.Configuration["RedisConnectionString"];
 //    //option.ConfigurationOptions.AbortOnConnectFail = false;
 //});
-
+builder.Services.AddDistributedMemoryCache();
 //builder.Services.AddApplicationInsightsTelemetry();
 //builder.Services.AddHealthChecks().AddDbContextCheck<ParkManagerDbContext>();
 

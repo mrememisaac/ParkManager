@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ParkManager.Application\ParkManager.Application.csproj" />
+    <ProjectReference Include="..\ParkManager.Shared\ParkManager.Shared.csproj" />
   </ItemGroup>
 
 </Project>
