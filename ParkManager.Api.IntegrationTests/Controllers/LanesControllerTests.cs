@@ -59,13 +59,18 @@ namespace ParkManager.Api.IntegrationTests.Controllers
         [Fact]
         public async Task AddLane_ReturnsCreatedResponse()
         {
+            var parkId = Guid.NewGuid();
             using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ParkManagerDbContext>();
                 context.Database.EnsureCreated();
+                Domain.Park park = new Domain.Park(parkId, "Park 1", "Street", "City", "State", "Country", 1.1, 2.2);
+                context.Parks.Add(park);
+                await context.SaveChangesAsync();
             }
+
             _client = _factory.CreateClient();
-            var lane = new Models.Lane(Guid.NewGuid(), Guid.NewGuid(), "Lane 1");
+            var lane = new Models.Lane(Guid.NewGuid(), parkId, "Lane 1");
             var response = await _client.PostAsJsonAsync("", lane);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
@@ -80,20 +85,24 @@ namespace ParkManager.Api.IntegrationTests.Controllers
         [Fact]
         public async Task UpdateLane_ReturnsNoContent()
         {
+            var laneId = Guid.NewGuid();
+            Domain.Park park = new Domain.Park(Guid.NewGuid(), "Park 1", "Street", "City", "State", "Country", 1.1, 2.2);
+            var lane = new Domain.Lane(laneId, park.Id, "Lane 1");
+
             using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ParkManagerDbContext>();
                 context.Database.EnsureCreated();
+                context.Parks.Add(park);
+                lane = context.Lanes.Add(lane).Entity;
+                await context.SaveChangesAsync();
             }
             _client = _factory.CreateClient();
 
-            var lane = new Models.Lane(Guid.NewGuid(), Guid.NewGuid(), "Lane 1");
-            var response = await _client.PostAsJsonAsync("", lane);
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
             // Assuming you have a lane to update. This might require creating a lane first.
             var laneToUpdate = new Models.Lane(lane.Id, lane.ParkId, "Lane 2");
-            response = await _client.PutAsJsonAsync("", laneToUpdate);
+            var response = await _client.PutAsJsonAsync("", laneToUpdate);
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             // Additional validation to ensure the lane was updated as expected
         }
@@ -101,17 +110,21 @@ namespace ParkManager.Api.IntegrationTests.Controllers
         [Fact]
         public async Task DeleteLane_ReturnsNoContent()
         {
+            var laneId = Guid.NewGuid();
+            Domain.Park park = new Domain.Park(Guid.NewGuid(), "Park 1", "Street", "City", "State", "Country", 1.1, 2.2);
+            var lane = new Domain.Lane(laneId, park.Id, "Lane 1");
+
             using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ParkManagerDbContext>();
                 context.Database.EnsureCreated();
+                context.Parks.Add(park);
+                lane = context.Lanes.Add(lane).Entity;
+                await context.SaveChangesAsync();
             }
             _client = _factory.CreateClient();
-            var lane = new Models.Lane(Guid.NewGuid(), Guid.NewGuid(), "Lane 1");
-            var response = await _client.PostAsJsonAsync("", lane);
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-            response = await _client.DeleteAsync($"{lane.Id}");
+            var response = await _client.DeleteAsync($"{laneId}");
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             // Additional validation to ensure the lane was deleted as expected
         }

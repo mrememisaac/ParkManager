@@ -46,10 +46,19 @@ namespace ParkManager.Api.IntegrationTests.Controllers
         [Fact]
         public async Task GetSlot_ReturnsNotFound_ForInvalidId()
         {
+
+            var slotId = Guid.NewGuid();
             using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ParkManagerDbContext>();
                 context.Database.EnsureCreated();
+                Domain.Park park = new Domain.Park(Guid.NewGuid(), "Park 1", "Street", "City", "State", "Country", 1.1, 2.2);
+                context.Parks.Add(park);
+                await context.SaveChangesAsync();
+                var lane = new Domain.Lane(Guid.NewGuid(), park.Id, "Lane 1");
+                await context.SaveChangesAsync();
+                var slot = new Domain.Slot(slotId, lane.Id, "Slot 1");
+                
             }
             _client = _factory.CreateClient();
             var response = await _client.GetAsync($"{Guid.NewGuid()}");
@@ -59,13 +68,21 @@ namespace ParkManager.Api.IntegrationTests.Controllers
         [Fact]
         public async Task AddSlot_ReturnsCreatedResponse()
         {
+            Domain.Park park = new Domain.Park(Guid.NewGuid(), "Park 1", "Street", "City", "State", "Country", 1.1, 2.2);
+            var lane = new Domain.Lane(Guid.NewGuid(), park.Id, "Lane 1");
+
             using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ParkManagerDbContext>();
                 context.Database.EnsureCreated();
+                context.Parks.Add(park);
+                context.Lanes.Add(lane);
+                await context.SaveChangesAsync();
             }
+
             _client = _factory.CreateClient();
-            var slot = new Models.Slot(Guid.NewGuid(), Guid.NewGuid(), "Lane 1");
+
+            var slot = new Domain.Slot(Guid.NewGuid(), lane.Id, "Slot 1");
             var response = await _client.PostAsJsonAsync("", slot);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
@@ -80,20 +97,25 @@ namespace ParkManager.Api.IntegrationTests.Controllers
         [Fact]
         public async Task UpdateSlot_ReturnsNoContent()
         {
+            Domain.Park park = new Domain.Park(Guid.NewGuid(), "Park 1", "Street", "City", "State", "Country", 1.1, 2.2);
+            var lane = new Domain.Lane(Guid.NewGuid(), park.Id, "Lane 1");
+            var slot = new Domain.Slot(Guid.NewGuid(), lane.Id, "Lane 1");
+
             using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ParkManagerDbContext>();
                 context.Database.EnsureCreated();
+                context.Parks.Add(park);
+                context.Lanes.Add(lane);
+                slot = context.Slots.Add(slot).Entity;
+                await context.SaveChangesAsync();
             }
+
             _client = _factory.CreateClient();
 
-            var slot = new Models.Slot(Guid.NewGuid(), Guid.NewGuid(), "Slot 1");
-            var response = await _client.PostAsJsonAsync("", slot);
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-            // Assuming you have a slot to update. This might require creating a slot first.
             var slotToUpdate = new Models.Slot(slot.Id, slot.LaneId, "Slot 2");
-            response = await _client.PutAsJsonAsync("", slotToUpdate);
+            var response = await _client.PutAsJsonAsync("", slotToUpdate);
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             // Additional validation to ensure the slot was updated as expected
         }
@@ -101,17 +123,23 @@ namespace ParkManager.Api.IntegrationTests.Controllers
         [Fact]
         public async Task DeleteSlot_ReturnsNoContent()
         {
+            Domain.Park park = new Domain.Park(Guid.NewGuid(), "Park 1", "Street", "City", "State", "Country", 1.1, 2.2);
+            var lane = new Domain.Lane(Guid.NewGuid(), park.Id, "Lane 1");
+            var slot = new Domain.Slot(Guid.NewGuid(), lane.Id, "Lane 1");
+
             using (var scope = _factory.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ParkManagerDbContext>();
                 context.Database.EnsureCreated();
+                context.Parks.Add(park);
+                context.Lanes.Add(lane);
+                slot = context.Slots.Add(slot).Entity;
+                await context.SaveChangesAsync();
             }
-            _client = _factory.CreateClient();
-            var slot = new Models.Slot(Guid.NewGuid(), Guid.NewGuid(), "Slot 1");
-            var response = await _client.PostAsJsonAsync("", slot);
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-            response = await _client.DeleteAsync($"{slot.Id}");
+            _client = _factory.CreateClient();
+
+            var response = await _client.DeleteAsync($"{slot.Id}");
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             // Additional validation to ensure the slot was deleted as expected
         }
