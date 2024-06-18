@@ -31,6 +31,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDepartureQueryResponse>> Get(Guid id)
         {
+            _logger.BeginScope("GetDeparture");
             var query = new GetDepartureQuery(id);
             var commandResponse = await _mediator.Send(query);
             return commandResponse != null ? Ok(commandResponse) : NotFound();
@@ -42,6 +43,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDeparturesQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListDepartures");
             var query = new GetDeparturesQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -53,6 +55,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddDepartureCommandResponse>> Post(Models.Departure departure)
         {
+            _logger.BeginScope("AddDeparture");
             var command = _mapper.Map<AddDepartureCommand>(departure);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -65,6 +68,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Departure departure)
         {
+            _logger.BeginScope("UpdateDeparture");
             var command = _mapper.Map<UpdateDepartureCommand>(departure);
             await _mediator.Send(command);
             return NoContent();
@@ -78,6 +82,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteDeparture");
             var command = new RemoveDepartureCommand(id);
             await _mediator.Send(command);
             return NoContent();

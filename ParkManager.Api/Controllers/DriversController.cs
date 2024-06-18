@@ -31,6 +31,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDriverQueryResponse>> Get(Guid id)
         {
+            _logger.BeginScope("GetDriver");
             var query = new GetDriverQuery(id);
             var commandResponse = await _mediator.Send(query);
             return commandResponse != null ? Ok(commandResponse) : NotFound();
@@ -42,6 +43,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetDriversQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListDrivers");
             var query = new GetDriversQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -53,6 +55,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddDriverCommandResponse>> Post(Models.Driver driver)
         {
+            _logger.BeginScope("AddDriver");
             var command = _mapper.Map<AddDriverCommand>(driver);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -65,6 +68,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Driver driver)
         {
+            _logger.BeginScope("UpdateDriver");
             var command = _mapper.Map<UpdateDriverCommand>(driver);
             await _mediator.Send(command);
             return NoContent();
@@ -78,6 +82,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteDriver");
             var command = new RemoveDriverCommand(id);
             await _mediator.Send(command);
             return NoContent();

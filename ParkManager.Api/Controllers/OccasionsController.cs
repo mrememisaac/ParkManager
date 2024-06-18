@@ -31,6 +31,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetOccasionQueryResponse>> Get(Guid id)
         {
+            _logger.BeginScope("GetOccasion");
             var query = new GetOccasionQuery(id);
             var commandResponse = await _mediator.Send(query);
             return commandResponse != null ? Ok(commandResponse) : NotFound();
@@ -42,6 +43,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetOccasionsQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListOccasions");
             var query = new GetOccasionsQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -53,6 +55,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddOccasionCommandResponse>> Post(Models.Occasion occasion)
         {
+            _logger.BeginScope("AddOccasion");
             var command = _mapper.Map<AddOccasionCommand>(occasion);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -65,6 +68,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Occasion occasion)
         {
+            _logger.BeginScope("UpdateOccasion");
             var command = _mapper.Map<UpdateOccasionCommand>(occasion);
             await _mediator.Send(command);
             return NoContent();
@@ -78,6 +82,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteOccasion");
             var command = new RemoveOccasionCommand(id);
             await _mediator.Send(command);
             return NoContent();

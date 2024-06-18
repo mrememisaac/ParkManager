@@ -41,6 +41,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetSlotsQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListSlots");
             var query = new GetSlotsQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -52,6 +53,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddSlotCommandResponse>> Post(Models.Slot slot)
         {
+            _logger.BeginScope("AddSlot");
             var command = _mapper.Map<AddSlotCommand>(slot);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -64,6 +66,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Slot slot)
         {
+            _logger.BeginScope("UpdateSlot");
             var command = _mapper.Map<UpdateSlotCommand>(slot);
             await _mediator.Send(command);
             return NoContent();
@@ -77,6 +80,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteSlot");
             var command = new RemoveSlotCommand(id);
             await _mediator.Send(command);
             return NoContent();

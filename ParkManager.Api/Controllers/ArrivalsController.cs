@@ -31,6 +31,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetArrivalQueryResponse>> Get(Guid id)
         {
+            _logger.BeginScope("GetArrival");
             var query = new GetArrivalQuery(id);
             var commandResponse = await _mediator.Send(query);
             return commandResponse != null ? Ok(commandResponse) : NotFound();
@@ -42,6 +43,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetArrivalsQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListArrivals");
             var query = new GetArrivalsQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -53,6 +55,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddArrivalCommandResponse>> Post(Models.Arrival arrival)
         {
+            _logger.BeginScope("AddArrival");
             var command = _mapper.Map<AddArrivalCommand>(arrival);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -65,6 +68,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Arrival arrival)
         {
+            _logger.BeginScope("UpdateArrival");
             var command = _mapper.Map<UpdateArrivalCommand>(arrival);
             await _mediator.Send(command);
             return NoContent();
@@ -78,6 +82,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteArrival");
             var command = new RemoveArrivalCommand(id);
             await _mediator.Send(command);
             return NoContent();

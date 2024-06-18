@@ -30,6 +30,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetVehicleQueryResponse>> Get(Guid id)
         {
+            _logger.BeginScope("GetVehicle");
             var query = new GetVehicleQuery(id);
             var commandResponse = await _mediator.Send(query);
             return commandResponse != null ? Ok(commandResponse) : NotFound();
@@ -41,6 +42,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetVehiclesQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListVehicles");
             var query = new GetVehiclesQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -52,6 +54,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddVehicleCommandResponse>> Post(Models.Vehicle vehicle)
         {
+            _logger.BeginScope("AddVehicle");
             var command = _mapper.Map<AddVehicleCommand>(vehicle);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -64,6 +67,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Vehicle vehicle)
         {
+            _logger.BeginScope("UpdateVehicle");
             var command = _mapper.Map<UpdateVehicleCommand>(vehicle);
             await _mediator.Send(command);            
             return NoContent();
@@ -77,6 +81,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteVehicle");
             var command = new RemoveVehicleCommand(id);
             await _mediator.Send(command);
             return NoContent();

@@ -31,6 +31,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetTagQueryResponse>> Get(Guid id)
         {
+            _logger.BeginScope("GetTag");
             var query = new GetTagQuery(id);
             var commandResponse = await _mediator.Send(query);
             return commandResponse != null ? Ok(commandResponse) : NotFound();
@@ -42,6 +43,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetTagsQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListTags");
             var query = new GetTagsQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -53,6 +55,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddTagCommandResponse>> Post(Models.Tag tag)
         {
+            _logger.BeginScope("AddTag");
             var command = _mapper.Map<AddTagCommand>(tag);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -65,6 +68,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Tag tag)
         {
+            _logger.BeginScope("UpdateTag");
             var command = _mapper.Map<UpdateTagCommand>(tag);
             await _mediator.Send(command);
             return NoContent();
@@ -78,6 +82,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteTag");
             var command = new RemoveTagCommand(id);
             await _mediator.Send(command);
             return NoContent();

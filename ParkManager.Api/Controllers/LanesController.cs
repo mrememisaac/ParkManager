@@ -31,6 +31,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetLaneQueryResponse>> Get(Guid id)
         {
+            _logger.BeginScope("GetLane");
             var query = new GetLaneQuery(id);
             var commandResponse = await _mediator.Send(query);
             return commandResponse != null ? Ok(commandResponse) : NotFound();
@@ -42,6 +43,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GetLanesQueryResponse>> List(int page = 0, int count = 100)
         {
+            _logger.BeginScope("ListLanes");
             var query = new GetLanesQuery(page, count);
             var commandResponse = await _mediator.Send(query);
             return Ok(commandResponse);
@@ -53,6 +55,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AddLaneCommandResponse>> Post(Models.Lane lane)
         {
+            _logger.BeginScope("AddLane");
             var command = _mapper.Map<AddLaneCommand>(lane);
             var commandResponse = await _mediator.Send(command);
             return CreatedAtAction(nameof(Get), new { id = commandResponse.Id }, commandResponse);
@@ -65,6 +68,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] Models.Lane lane)
         {
+            _logger.BeginScope("UpdateLane");
             var command = _mapper.Map<UpdateLaneCommand>(lane);
             await _mediator.Send(command);
             return NoContent();
@@ -78,6 +82,7 @@ namespace ParkManager.Api.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
+            _logger.BeginScope("DeleteLane");
             var command = new RemoveLaneCommand(id);
             await _mediator.Send(command);
             return NoContent();
